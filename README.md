@@ -19,6 +19,26 @@ bloqueia o service worker, então essa parte só vale servida.
 Para instalar no celular, use o IP desta máquina na mesma rede — por exemplo
 `http://192.168.0.10:8000`.
 
+## Publicar na web (Vercel)
+
+O projeto é estático, então não há build. Na pasta do projeto:
+
+```bash
+npx vercel login     # uma vez, autentica sua conta
+npx vercel --prod    # publica e devolve a URL
+```
+
+A primeira publicação pergunta o nome do projeto e o diretório — aceite os
+padrões (o diretório é `./`). O `vercel.json` já cuida do detalhe que costuma
+morder: o `sw.js` é servido sem cache, senão o navegador segura a versão antiga
+do service worker e as atualizações não chegam.
+
+Publicado em HTTPS, o TrashTime fica instalável de qualquer celular, sem
+precisar estar na mesma rede.
+
+Qualquer hospedagem de arquivos estáticos serve igual — GitHub Pages, Netlify,
+Cloudflare Pages — desde que seja HTTPS, que é exigência do service worker.
+
 ## Arquivos
 
 | Arquivo | O que faz |
@@ -29,6 +49,7 @@ Para instalar no celular, use o IP desta máquina na mesma rede — por exemplo
 | `manifest.json` | Identidade do app instalável: nome, cores, ícones |
 | `sw.js` | Service worker: guarda o app para funcionar sem internet |
 | `servir.sh` | Sobe um servidor local na porta 8000 |
+| `vercel.json` | Cabeçalhos de publicação (impede cache do service worker) |
 | `icone-*.png` | Ícones do app, gerados a partir do ícone do caminhão |
 
 Os arquivos `.dc.html` e `trashtime-app.html` são o **protótipo visual** que
