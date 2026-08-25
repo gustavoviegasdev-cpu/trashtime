@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    body { margin: 0; font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #1F7A45; text-decoration: none; }
+    a:hover { color: #14532D; }
+    button { font-family: inherit; border: 0; background: none; padding: 0; margin: 0; color: inherit; cursor: pointer; }
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #F2F5F3; color: #0F1D14;">
+
+  <div style="background: #14532D; padding: 54px 20px 18px;">
+    <div style="font-size: 21px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px;">Calendário</div>
+    <div style="font-size: 13px; font-weight: 500; color: #A9D3B9; margin-top: 3px;">Dias e horários de coleta por região</div>
+  </div>
+
+  <div style="display: flex; gap: 8px; padding: 12px 14px 0;">
+    <sc-for list="{{ regions }}" as="r" hint-placeholder-count="3">
+      <button onClick="{{ r.pick }}" style="flex-grow: 1; flex-basis: 0; height: 44px; border-radius: 12px; background: {{ r.bg }}; color: {{ r.fg }}; font-size: 12.5px; font-weight: 700; letter-spacing: -0.1px;">{{ r.name }}</button>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 18px 6px;">
+    <button onClick="{{ prevMonth }}" style="width: 44px; height: 44px; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(15,29,20,0.06);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14532D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5 8 12l6.5 7"></path></svg>
+    </button>
+    <div style="text-align: center;">
+      <div style="font-size: 17px; font-weight: 800; letter-spacing: -0.3px;">{{ monthLabel }}</div>
+      <div style="font-size: 11.5px; font-weight: 600; color: #6B7A70; margin-top: 2px;">{{ monthSummary }}</div>
+    </div>
+    <button onClick="{{ nextMonth }}" style="width: 44px; height: 44px; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(15,29,20,0.06);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14532D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5 16 12l-6.5 7"></path></svg>
+    </button>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding: 4px 14px 0;">
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">DOM</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">SEG</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">TER</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">QUA</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">QUI</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">SEX</div>
+    <div style="text-align: center; font-size: 10.5px; font-weight: 700; color: #8A968D; letter-spacing: 0.5px;">SÁB</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding: 6px 14px 0;">
+    <sc-for list="{{ cells }}" as="d" hint-placeholder-count="35">
+      <button onClick="{{ d.pick }}" style="height: 44px; border-radius: 12px; background: {{ d.bg }}; box-shadow: {{ d.ring }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;">
+        <div style="font-size: 13.5px; font-weight: {{ d.weight }}; color: {{ d.fg }}; line-height: 1;">{{ d.label }}</div>
+        <div style="width: 5px; height: 5px; border-radius: 3px; background: {{ d.dot }};"></div>
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: center; gap: 14px; padding: 8px 14px 0;">
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <div style="width: 7px; height: 7px; border-radius: 4px; background: #2FA85A;"></div>
+      <div style="font-size: 10.5px; font-weight: 600; color: #3C4A41;">Coleta comum</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <div style="width: 7px; height: 7px; border-radius: 4px; background: #E8A317;"></div>
+      <div style="font-size: 10.5px; font-weight: 600; color: #3C4A41;">Coleta seletiva</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <div style="width: 9px; height: 9px; border-radius: 5px; border: 2px solid #14532D;"></div>
+      <div style="font-size: 10.5px; font-weight: 600; color: #3C4A41;">Hoje</div>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px 14px 10px;">
+    <div style="background: #FFFFFF; border-radius: 18px; padding: 14px 16px; box-shadow: 0 4px 16px rgba(15,29,20,0.07);">
+      <div style="display: flex; align-items: flex-start; gap: 10px;">
+        <div style="flex-grow: 1;">
+          <div style="font-size: 15.5px; font-weight: 800; letter-spacing: -0.3px;">{{ selTitle }}</div>
+          <div style="font-size: 12px; font-weight: 600; color: #6B7A70; margin-top: 2px;">{{ selRegion }}</div>
+        </div>
+        <div style="border-radius: 9px; background: {{ selTypeBg }}; color: {{ selTypeFg }}; font-size: 11px; font-weight: 700; padding: 6px 10px; flex-shrink: 0;">{{ selType }}</div>
+      </div>
+
+      <sc-if value="{{ selHas }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <div style="flex-grow: 1; flex-basis: 0; background: #F4F7F5; border-radius: 12px; padding: 9px 12px;">
+            <div style="font-size: 10px; font-weight: 700; color: #6B7A70; letter-spacing: 0.3px;">HORÁRIO PREVISTO</div>
+            <div style="font-size: 14.5px; font-weight: 800; margin-top: 2px; letter-spacing: -0.2px;">{{ selWindow }}</div>
+          </div>
+          <div style="flex-grow: 1; flex-basis: 0; background: #F4F7F5; border-radius: 12px; padding: 9px 12px;">
+            <div style="font-size: 10px; font-weight: 700; color: #6B7A70; letter-spacing: 0.3px;">CAMINHÃO</div>
+            <div style="font-size: 14.5px; font-weight: 800; margin-top: 2px; letter-spacing: -0.2px;">{{ selTruck }}</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="background: #FFFFFF; border-top: 1px solid #E4EAE6; padding: 9px 8px 20px; display: flex;">
+    <div style="flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#8A968D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"></path>
+        <circle cx="12" cy="10" r="2.5"></circle>
+      </svg>
+      <div style="font-size: 10.5px; font-weight: 600; color: #8A968D;">Mapa</div>
+    </div>
+    <div style="flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#1F7A45" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="16" rx="3" fill="#E8F5EC" stroke="#1F7A45"></rect>
+        <path d="M3 10h18M8 3v4M16 3v4"></path>
+      </svg>
+      <div style="font-size: 10.5px; font-weight: 700; color: #1F7A45;">Calendário</div>
+    </div>
+    <div style="flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#8A968D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8a6 6 0 0 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"></path>
+        <path d="M10.3 20a2 2 0 0 0 3.4 0"></path>
+      </svg>
+      <div style="font-size: 10.5px; font-weight: 600; color: #8A968D;">Avisos</div>
+    </div>
+    <div style="flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0;">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#8A968D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3.2"></circle>
+        <path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"></path>
+      </svg>
+      <div style="font-size: 10.5px; font-weight: 600; color: #8A968D;">Configurações</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { month: 7, region: 0, sel: '2026-7-25' };
+  }
+  regionData() {
+    return [
+      { name: 'Centro', comum: [2, 4, 6], seletiva: [3], janela: '06:00 – 09:00', janelaSel: '14:00 – 17:00', truck: 'CT-118' },
+      { name: 'Jd. Aurora', comum: [1, 3, 5], seletiva: [6], janela: '07:00 – 10:00', janelaSel: '13:00 – 16:00', truck: 'CT-104' },
+      { name: 'Vila Nova', comum: [2, 5], seletiva: [4], janela: '05:30 – 08:30', janelaSel: '15:00 – 18:00', truck: 'CT-090' }
+    ];
+  }
+  renderVals() {
+    const MES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const MES_MIN = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+    const DIAS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const YEAR = 2026;
+    const TODAY = { y: 2026, m: 7, d: 25 };
+    const regions = this.regionData();
+    const ri = this.state.region;
+    const reg = regions[ri];
+    const m = this.state.month;
+
+    const kindOf = (dow) => reg.comum.indexOf(dow) >= 0 ? 'comum' : (reg.seletiva.indexOf(dow) >= 0 ? 'seletiva' : 'nenhum');
+    const first = new Date(YEAR, m, 1).getDay();
+    const total = new Date(YEAR, m + 1, 0).getDate();
+
+    const cells = [];
+    for (let i = 0; i < first; i++) {
+      cells.push({ label: '', bg: 'transparent', fg: '#8A968D', dot: 'transparent', ring: 'none', weight: '500', pick: () => {} });
+    }
+    let nComum = 0, nSel = 0;
+    for (let d = 1; d <= total; d++) {
+      const dow = new Date(YEAR, m, d).getDay();
+      const kind = kindOf(dow);
+      if (kind === 'comum') nComum++;
+      if (kind === 'seletiva') nSel++;
+      const key = YEAR + '-' + m + '-' + d;
+      const isSel = this.state.sel === key;
+      const isToday = TODAY.y === YEAR && TODAY.m === m && TODAY.d === d;
+      let dot = 'transparent';
+      if (kind === 'comum') dot = isSel ? '#FFFFFF' : '#2FA85A';
+      if (kind === 'seletiva') dot = isSel ? '#FFE7B8' : '#E8A317';
+      cells.push({
+        label: String(d),
+        bg: isSel ? '#14532D' : (kind === 'nenhum' ? 'transparent' : '#FFFFFF'),
+        fg: isSel ? '#FFFFFF' : (kind === 'nenhum' ? '#8A968D' : '#0F1D14'),
+        dot: dot,
+        ring: isToday && !isSel ? 'inset 0 0 0 2px #14532D' : 'none',
+        weight: kind === 'nenhum' ? '500' : '700',
+        pick: () => this.setState({ sel: key })
+      });
+    }
+
+    const parts = String(this.state.sel).split('-');
+    const sy = Number(parts[0]), sm = Number(parts[1]), sd = Number(parts[2]);
+    const sDow = new Date(sy, sm, sd).getDay();
+    const sKind = kindOf(sDow);
+
+    return {
+      regions: regions.map((r, i) => ({
+        name: r.name,
+        bg: i === ri ? '#14532D' : '#FFFFFF',
+        fg: i === ri ? '#FFFFFF' : '#3C4A41',
+        pick: () => this.setState({ region: i })
+      })),
+      cells: cells,
+      monthLabel: MES[m] + ' de ' + YEAR,
+      monthSummary: nComum + ' coletas comuns · ' + nSel + ' seletivas',
+      prevMonth: () => this.setState({ month: Math.max(6, this.state.month - 1) }),
+      nextMonth: () => this.setState({ month: Math.min(8, this.state.month + 1) }),
+      selTitle: DIAS[sDow] + ', ' + sd + ' de ' + MES_MIN[sm],
+      selRegion: reg.name + ' · sua região',
+      selHas: sKind !== 'nenhum',
+      selType: sKind === 'comum' ? 'Coleta comum' : (sKind === 'seletiva' ? 'Coleta seletiva' : 'Sem coleta'),
+      selTypeBg: sKind === 'comum' ? '#E8F5EC' : (sKind === 'seletiva' ? '#FDF3E0' : '#EEF1EF'),
+      selTypeFg: sKind === 'comum' ? '#1F7A45' : (sKind === 'seletiva' ? '#A96F06' : '#6B7A70'),
+      selWindow: sKind === 'seletiva' ? reg.janelaSel : reg.janela,
+      selTruck: reg.truck
+    };
+  }
+}
+</script>
+</body>
+</html>
