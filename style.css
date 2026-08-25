@@ -1497,3 +1497,306 @@ button {
     line-height: 1.45;
     margin: 8px 0 0;
 }
+
+/* =========================================================
+   DESKTOP
+   As "faixas" não existem no celular (display: contents), e
+   viram as colunas do layout a partir de 900px.
+   ========================================================= */
+.faixa {
+    display: contents;
+}
+
+.marca-lateral {
+    display: none;
+}
+
+@media (min-width: 900px) {
+
+    .app {
+        max-width: none;
+        min-height: 100vh;
+        padding: 0 0 0 236px;
+    }
+
+    /* ---- a barra de abas vira navegação lateral ---- */
+    .abas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 236px;
+        max-width: none;
+        transform: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        background: var(--verde-escuro);
+        border-top: 0;
+        padding: 26px 16px 20px;
+    }
+
+    .marca-lateral {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 8px 24px;
+    }
+
+    .marca-lateral__icone {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .marca-lateral__nome {
+        font-size: 17px;
+        font-weight: 800;
+        color: #FFFFFF;
+        letter-spacing: -0.3px;
+    }
+
+    .aba {
+        flex: 0 0 auto;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        color: var(--verde-suave);
+    }
+
+    .aba span {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .aba--ativa {
+        background: rgba(255, 255, 255, 0.13);
+        color: #FFFFFF;
+    }
+
+    .aba--ativa span {
+        color: #FFFFFF;
+        font-weight: 700;
+    }
+
+    .selo--aba {
+        position: static;
+        margin-left: auto;
+        border-color: transparent;
+    }
+
+    /* ---- telas em duas colunas ---- */
+    .tela--ativa {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 22px;
+        align-items: start;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 30px 36px;
+    }
+
+    .faixa {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+    }
+
+    .faixa--principal {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .faixa--lado {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    #tela-mapa .faixa--status {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    #tela-mapa .faixa--principal {
+        grid-row: 2 / 4;
+    }
+
+    #tela-mapa .faixa--lado {
+        grid-row: 3;
+    }
+
+    #tela-avisos {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 840px;
+    }
+
+    /* ---- cabeçalho ocupa a largura toda ---- */
+    .cabecalho {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        margin: 0 -30px 6px;
+        padding: 34px 34px 30px;
+        border-radius: 0 0 22px 22px;
+    }
+
+    .cabecalho__titulo {
+        font-size: 25px;
+    }
+
+    .cabecalho__subtitulo {
+        font-size: 14px;
+    }
+
+    .cabecalho__sino {
+        display: none;
+    }
+
+    /* ---- espaçamentos: quem cuida do respiro agora é o gap da faixa ---- */
+    .faixa > *,
+    #tela-avisos > *:not(.cabecalho) {
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .faixa .secao,
+    .faixa .chips,
+    #tela-avisos .chips,
+    #tela-avisos .lista--avisos {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .secao {
+        padding-top: 0;
+    }
+
+    .secao__rotulo {
+        margin: 2px 0 0;
+    }
+
+    .cartoes-status,
+    .banner,
+    .cartao,
+    .bloco-distancia,
+    .detalhe,
+    .cartao-caminhao,
+    .relato,
+    .historico__item {
+        margin: 0;
+    }
+
+    .lista,
+    .lista--avisos {
+        margin-top: 0;
+    }
+
+    .nota-rodape {
+        margin: 4px 0 0;
+    }
+
+    /* ---- mapa grande, na proporção exata do desenho ---- */
+    .mapa {
+        height: auto;
+        aspect-ratio: 3 / 2;
+        border-radius: 18px;
+    }
+
+    /* ---- calendário mais folgado ---- */
+    .mes {
+        padding: 2px 0 6px;
+    }
+
+    .semana,
+    .grade {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .dia {
+        height: 54px;
+    }
+
+    .legenda-cal {
+        padding: 6px 0 0;
+    }
+
+    /* ---- cartões de status lado a lado na coluna estreita ---- */
+    .cartoes-status {
+        flex-direction: column;
+    }
+
+    /* ---- folhas viram janelas centralizadas ---- */
+    .folha {
+        top: 50%;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        max-width: 540px;
+        max-height: 84vh;
+        border-radius: 20px;
+        padding: 24px 26px 26px;
+        animation: aparecer 0.2s ease-out;
+        box-shadow: 0 24px 60px rgba(15, 29, 20, 0.3);
+    }
+
+    @keyframes aparecer {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -46%);
+        }
+    }
+
+    .folha__puxador {
+        display: none;
+    }
+
+    /* ---- primeira configuração: cartão centralizado ---- */
+    .boas-vindas {
+        left: 0;
+        right: 0;
+        transform: none;
+        max-width: none;
+        padding: 56px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .boas-vindas > * {
+        width: 100%;
+        max-width: 440px;
+    }
+
+    /* ---- aviso flutuante vai para o canto ---- */
+    .alerta {
+        left: auto;
+        right: 28px;
+        bottom: 28px;
+        transform: none;
+        width: auto;
+        max-width: 380px;
+        animation: surgir 0.22s ease-out;
+    }
+
+    @keyframes surgir {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    }
+}
+
+/* O atributo hidden precisa vencer qualquer display declarado nas regras acima.
+   Sem isto, um "display: flex" no desktop deixa a tela de boas-vindas presa. */
+[hidden] {
+    display: none !important;
+}

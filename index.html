@@ -83,6 +83,7 @@
                 </button>
             </header>
 
+            <div class="faixa faixa--status">
             <div class="cartoes-status">
                 <div class="cartao-status">
                     <div class="cartao-status__icone">
@@ -110,6 +111,9 @@
                 </div>
             </div>
 
+            </div>
+
+            <div class="faixa faixa--principal">
             <div class="mapa">
                 <svg class="mapa__svg" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice">
                     <rect x="0" y="0" width="390" height="260" fill="#E9EDEA" />
@@ -150,7 +154,9 @@
             </div>
 
             <div id="cartao-caminhao"></div>
+            </div>
 
+            <div class="faixa faixa--lado">
             <div class="secao">
                 <div class="secao__cabecalho">
                     <h2 class="secao__titulo">Próximas coletas</h2>
@@ -184,6 +190,7 @@
                 </button>
                 <div id="meus-relatos"></div>
             </div>
+            </div>
         </section>
 
         <!-- ============ TELA: CALENDÁRIO ============ -->
@@ -195,6 +202,7 @@
                 </div>
             </header>
 
+            <div class="faixa faixa--principal">
             <div class="chips" id="chips-regiao"></div>
 
             <div class="mes">
@@ -217,6 +225,9 @@
                 <span class="legenda__item"><i class="bolinha bolinha--hoje"></i>Hoje</span>
             </div>
 
+            </div>
+
+            <div class="faixa faixa--lado">
             <div id="detalhe-dia"></div>
 
             <div class="secao">
@@ -224,6 +235,7 @@
                     <h2 class="secao__titulo">Últimas coletas</h2>
                 </div>
                 <div id="historico"></div>
+            </div>
             </div>
         </section>
 
@@ -251,6 +263,7 @@
                 </div>
             </header>
 
+            <div class="faixa faixa--principal">
             <p class="secao__rotulo">SUA REGIÃO</p>
             <div class="chips chips--coluna" id="chips-config-regiao"></div>
 
@@ -264,6 +277,9 @@
                 </div>
             </div>
 
+            </div>
+
+            <div class="faixa faixa--lado">
             <p class="secao__rotulo">NOTIFICAÇÕES</p>
             <div class="cartao" id="lista-interruptores"></div>
 
@@ -282,6 +298,7 @@
             </div>
 
             <p class="nota-rodape">TrashTime · versão 1.0 · dados simulados</p>
+            </div>
         </section>
 
         <!-- ============ PRIMEIRA CONFIGURAÇÃO ============ -->
@@ -357,6 +374,14 @@
 
         <!-- ============ BARRA DE NAVEGAÇÃO ============ -->
         <nav class="abas">
+            <div class="marca-lateral">
+                <span class="marca-lateral__icone">
+                    <svg class="icone" width="22" height="22">
+                        <use href="#ic-caminhao" />
+                    </svg>
+                </span>
+                <span class="marca-lateral__nome">TrashTime</span>
+            </div>
             <button class="aba aba--ativa" data-tela="mapa">
                 <svg class="icone" width="23" height="23">
                     <use href="#ic-pino" />

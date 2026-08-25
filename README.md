@@ -125,6 +125,20 @@ rede, o app usa a fonte do sistema e continua legível.
 Para publicar uma versão nova, mude `trashtime-v1` no `sw.js` para `v2`: o
 worker limpa o cache antigo e busca tudo de novo.
 
+## Celular e desktop
+
+O layout tem duas formas, com a mesma qualidade nas duas:
+
+- **Celular:** coluna única, barra de abas embaixo, folhas deslizando de baixo
+  para cima.
+- **Desktop (a partir de 900px):** navegação lateral fixa com a marca, conteúdo
+  em duas colunas (mapa grande à esquerda, informações à direita), folhas viram
+  janelas centralizadas e o aviso flutuante vai para o canto.
+
+A troca é feita só por CSS. Os elementos `.faixa` são invisíveis ao layout no
+celular (`display: contents`) e viram as colunas no desktop — assim a mesma
+marcação serve às duas formas, sem duplicação.
+
 ## Acessibilidade
 
 - Alvos de toque de no mínimo 44 px.
