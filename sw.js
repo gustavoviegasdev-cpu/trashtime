@@ -1,6 +1,9 @@
-/* Service worker do TrashTime: guarda o app para funcionar sem internet. */
+/* Service worker do TrashTime.
+   Estratégia: rede primeiro para o app (HTML, CSS, JS), cache primeiro para
+   imagens. Assim uma versão nova chega sozinha a quem já visitou, e o app
+   continua abrindo sem internet. */
 
-const CACHE = 'trashtime-v1';
+const CACHE = 'trashtime-v2';
 
 const ARQUIVOS = [
     './',
@@ -40,30 +43,56 @@ self.addEventListener('activate', function (evento) {
     );
 });
 
+function guardar(pedido, resposta) {
+    if (resposta && resposta.ok && new URL(pedido.url).origin === location.origin) {
+        const copia = resposta.clone();
+        caches.open(CACHE).then(function (cache) {
+            cache.put(pedido, copia);
+        });
+    }
+    return resposta;
+}
+
 self.addEventListener('fetch', function (evento) {
-    if (evento.request.method !== 'GET') {
+    const pedido = evento.request;
+
+    if (pedido.method !== 'GET') {
         return;
     }
 
-    evento.respondWith(
-        caches.match(evento.request).then(function (guardado) {
-            if (guardado) {
-                return guardado;
-            }
-            return fetch(evento.request).then(function (resposta) {
-                // Guarda o que vier do próprio app para a próxima vez
-                if (resposta.ok && new URL(evento.request.url).origin === location.origin) {
-                    const copia = resposta.clone();
-                    caches.open(CACHE).then(function (cache) {
-                        cache.put(evento.request, copia);
+    const url = new URL(pedido.url);
+    const mesmaOrigem = url.origin === location.origin;
+    const ehMidia = /\.(png|jpg|jpeg|gif|svg|webp|ico|woff2?)$/i.test(url.pathname);
+
+    // O app em si: tenta a rede antes, para a versão nova chegar sem espera
+    if (mesmaOrigem && !ehMidia) {
+        evento.respondWith(
+            fetch(pedido)
+                .then(function (resposta) {
+                    return guardar(pedido, resposta);
+                })
+                .catch(function () {
+                    // Sem rede: devolve o que estiver guardado
+                    return caches.match(pedido).then(function (guardado) {
+                        if (guardado) {
+                            return guardado;
+                        }
+                        if (pedido.mode === 'navigate') {
+                            return caches.match('./index.html');
+                        }
+                        return Response.error();
                     });
-                }
-                return resposta;
+                })
+        );
+        return;
+    }
+
+    // Imagens e fontes quase nunca mudam: cache primeiro, que é mais rápido
+    evento.respondWith(
+        caches.match(pedido).then(function (guardado) {
+            return guardado || fetch(pedido).then(function (resposta) {
+                return guardar(pedido, resposta);
             }).catch(function () {
-                // Sem rede: só a navegação cai de volta na página inicial
-                if (evento.request.mode === 'navigate') {
-                    return caches.match('./index.html');
-                }
                 return Response.error();
             });
         })

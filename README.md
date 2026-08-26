@@ -138,8 +138,14 @@ disso o app abre mesmo com a rede fora do ar — verificado derrubando o servido
 e recarregando. A fonte vem do Google Fonts e é o único recurso externo; sem
 rede, o app usa a fonte do sistema e continua legível.
 
-Para publicar uma versão nova, mude `trashtime-v1` no `sw.js` para `v2`: o
-worker limpa o cache antigo e busca tudo de novo.
+A estratégia é **rede primeiro** para HTML, CSS e JS: o worker tenta buscar a
+versão do servidor e só cai no cache se não houver conexão. É isso que faz uma
+publicação nova chegar sozinha a quem já visitou o site, sem depender de trocar
+o número da versão a cada mudança. Imagens e fontes seguem o caminho oposto —
+cache primeiro, porque quase nunca mudam e assim carregam na hora.
+
+A versão do cache (`trashtime-v2`) só precisa mudar quando a lista de arquivos
+guardados mudar, para o worker descartar o cache antigo.
 
 ## Celular e desktop
 
