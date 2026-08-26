@@ -8,6 +8,10 @@
 // 1 unidade do mapa equivale a 4 metros
 const ESCALA = 4;
 
+// O trecho logo à frente do caminhão é o que a legenda chama de "rota prevista";
+// o que vem depois dele ainda é "ainda não passou". Uma quadra e meia.
+const ALCANCE_PREVISTO = 90;
+
 // Onde o morador está no mapa: cada bairro tem seu ponto
 function pontoUsuario() {
     return REGIOES[estado.regiao].ponto;
@@ -402,13 +406,14 @@ function montarFrota() {
     const camada = document.getElementById('camada-frota');
     let svg = '';
 
+    // Cada rota tem três pedaços, um por estado da legenda
     CAMINHOES.forEach(function (caminhao) {
-        const parado = caminhao.velocidade === 0;
-        svg += '<path id="rota-a-' + caminhao.id + '" d="" stroke="#2FA85A" stroke-width="5" fill="none" ' +
-            'stroke-linecap="round" stroke-linejoin="round" />';
-        svg += '<path id="rota-b-' + caminhao.id + '" d="" stroke="' + (parado ? '#B9C4BC' : '#4CC97A') + '" ' +
-            'stroke-width="' + (parado ? '4.5' : '5') + '" fill="none" ' +
-            'stroke-dasharray="' + (parado ? '2 9' : '9 9') + '" stroke-linecap="round" stroke-linejoin="round" />';
+        svg += '<path id="rota-passou-' + caminhao.id + '" d="" stroke="#2FA85A" stroke-width="5" ' +
+            'fill="none" stroke-linecap="round" stroke-linejoin="round" />';
+        svg += '<path id="rota-prevista-' + caminhao.id + '" d="" stroke="#4CC97A" stroke-width="5" ' +
+            'fill="none" stroke-dasharray="9 9" stroke-linecap="round" stroke-linejoin="round" />';
+        svg += '<path id="rota-pendente-' + caminhao.id + '" d="" stroke="#B9C4BC" stroke-width="4.5" ' +
+            'fill="none" stroke-dasharray="2 9" stroke-linecap="round" stroke-linejoin="round" />';
     });
 
     // Localização do morador (acompanha o bairro escolhido)
@@ -461,19 +466,23 @@ function atualizarFrota() {
         const selecionado = caminhao.id === estado.caminhaoSelecionado;
         const opacidade = selecionado ? 1 : 0.45;
 
-        const passou = document.getElementById('rota-a-' + caminhao.id);
-        const prevista = document.getElementById('rota-b-' + caminhao.id);
+        const passou = document.getElementById('rota-passou-' + caminhao.id);
+        const prevista = document.getElementById('rota-prevista-' + caminhao.id);
+        const pendente = document.getElementById('rota-pendente-' + caminhao.id);
 
-        if (caminhao.velocidade === 0) {
-            passou.setAttribute('d', '');
-            prevista.setAttribute('d', paraD(caminhao.rota));
-        } else {
-            const partes = dividirRota(caminhao.rota, andado);
-            passou.setAttribute('d', paraD(partes.percorrido));
-            prevista.setAttribute('d', partes.previsto.length > 1 ? paraD(partes.previsto) : '');
-        }
-        passou.setAttribute('opacity', opacidade);
-        prevista.setAttribute('opacity', opacidade);
+        // Quem não saiu tem a rota inteira como "ainda não passou"
+        const ateOndePrevisto = caminhao.velocidade === 0
+            ? 0
+            : Math.min(andado + ALCANCE_PREVISTO, total);
+        const desenhar = function (alvo, de, ate) {
+            const pedaco = trechoRota(caminhao.rota, de, ate);
+            alvo.setAttribute('d', pedaco.length > 1 ? paraD(pedaco) : '');
+            alvo.setAttribute('opacity', opacidade);
+        };
+
+        desenhar(passou, 0, caminhao.velocidade === 0 ? 0 : andado);
+        desenhar(prevista, caminhao.velocidade === 0 ? 0 : andado, ateOndePrevisto);
+        desenhar(pendente, ateOndePrevisto, total);
 
         const ponto = pontoEm(caminhao.rota, andado);
         const halo = document.getElementById('halo-' + caminhao.id);
@@ -511,6 +520,33 @@ function desenharFrota() {
         montarFrota();
     }
     atualizarFrota();
+}
+
+// Recorta o pedaço da rota entre duas distâncias percorridas
+function trechoRota(rota, de, ate) {
+    const pontos = [];
+    let acumulado = 0;
+
+    for (let i = 0; i < rota.length - 1; i++) {
+        const a = rota[i];
+        const b = rota[i + 1];
+        const comprimento = Math.hypot(b.x - a.x, b.y - a.y);
+        const inicio = acumulado;
+        const fim = acumulado + comprimento;
+
+        if (fim > de && inicio < ate) {
+            const t1 = Math.max(0, (de - inicio) / comprimento);
+            const t2 = Math.min(1, (ate - inicio) / comprimento);
+            const p1 = { x: a.x + (b.x - a.x) * t1, y: a.y + (b.y - a.y) * t1 };
+            const p2 = { x: a.x + (b.x - a.x) * t2, y: a.y + (b.y - a.y) * t2 };
+            if (pontos.length === 0) {
+                pontos.push(p1);
+            }
+            pontos.push(p2);
+        }
+        acumulado = fim;
+    }
+    return pontos;
 }
 
 function paraD(pontos) {
@@ -766,38 +802,61 @@ function desenharDetalheDia() {
 
 /* ---------- 5b. Itinerário do caminhão ---------- */
 
-function horaRelativa(segundos) {
-    const momento = new Date(Date.now() + segundos * 1000);
-    return doisDigitos(momento.getHours()) + ':' + doisDigitos(momento.getMinutes());
+// Qual bairro este caminhão atende
+function regiaoDoCaminhao(caminhao) {
+    const chave = Object.keys(REGIOES).find(function (id) {
+        return caminhao.nome.indexOf(REGIOES[id].caminhao) >= 0;
+    });
+    return chave ? REGIOES[chave] : null;
+}
+
+function minutosDe(hora) {
+    const partes = hora.split(':');
+    return Number(partes[0]) * 60 + Number(partes[1]);
+}
+
+function horaDeMinutos(minutos) {
+    const m = Math.round(minutos);
+    return doisDigitos(Math.floor(m / 60) % 24) + ':' + doisDigitos(m % 60);
 }
 
 // Estado de cada rua da rota, comparando o quanto o caminhão já andou
 function itinerarioDe(caminhao) {
-    const andado = caminhao.progresso * comprimentoRota(caminhao.rota);
+    const total = comprimentoRota(caminhao.rota);
+    const andado = caminhao.progresso * total;
     const parado = caminhao.velocidade === 0;
+    const regiao = regiaoDoCaminhao(caminhao);
     const itens = [];
-    let inicio = 0;
 
+    // Os horários saem da janela de coleta do bairro, não do relógio: o caminhão
+    // percorre a rota ao longo dela, então o itinerário fecha com o que o
+    // calendário e os cartões de status prometem.
+    const janela = regiao ? regiao.janela : '06:00 – 09:00';
+    const partida = minutosDe(janela.split(' – ')[0]);
+    const chegada = minutosDe(janela.split(' – ')[1]);
+
+    const horaNaDistancia = function (distancia) {
+        return horaDeMinutos(partida + (distancia / total) * (chegada - partida));
+    };
+
+    let inicio = 0;
     for (let i = 0; i < caminhao.rota.length - 1; i++) {
         const a = caminhao.rota[i];
         const b = caminhao.rota[i + 1];
-        const trecho = Math.hypot(b.x - a.x, b.y - a.y);
-        const fim = inicio + trecho;
+        const fim = inicio + Math.hypot(b.x - a.x, b.y - a.y);
         const nome = caminhao.ruas[i] || 'Trecho ' + (i + 1);
 
         let situacao = 'pendente';
-        let hora = '—';
+        let hora = horaNaDistancia(inicio);
 
         if (parado) {
             situacao = 'pendente';
         } else if (andado >= fim) {
             situacao = 'atendida';
-            hora = horaRelativa(-(andado - fim) / caminhao.velocidade);
+            hora = horaNaDistancia(fim);
         } else if (andado > inicio) {
             situacao = 'agora';
             hora = 'agora';
-        } else {
-            hora = horaRelativa((inicio - andado) / caminhao.velocidade);
         }
 
         itens.push({ nome: nome, situacao: situacao, hora: hora });

@@ -66,12 +66,19 @@ originou o app, e não fazem parte da aplicação.
 
 ### Mapa
 - Três caminhões percorrem suas rotas pelas ruas, avançando a cada segundo.
-- O trajeto aparece em três estados: **já passou** (verde cheio), **rota
-  prevista** (verde tracejado) e **ainda não passou** (cinza pontilhado).
+- O trajeto de cada caminhão é dividido nos três estados da legenda: **já
+  passou** (verde cheio, atrás dele), **rota prevista** (verde tracejado, o
+  trecho logo à frente) e **ainda não passou** (cinza pontilhado, o resto).
+  Um caminhão que não saiu tem a rota inteira em cinza.
+- As quatro zonas de bairro aparecem desenhadas e nomeadas, alinhadas à mesma
+  malha, para dar para ver qual rota atende qual bairro.
 - Tocar num caminhão seleciona; tocar no cartão abre o **itinerário** com as ruas
   da rota, o horário em que cada uma foi atendida e a estimativa das que faltam.
 - O tempo de chegada é calculado a partir da distância que falta e da velocidade
   do caminhão — não é um texto fixo.
+- Os horários do itinerário saem da **janela de coleta do bairro**, distribuídos
+  ao longo da rota. Assim o que o itinerário mostra fecha com o que o calendário
+  e os cartões de status prometem, em vez de seguir o relógio de quem abre.
 
 ### Bairros e localização
 - Cada bairro tem sua própria regra de dias, janela de horário, caminhão e
