@@ -12,51 +12,72 @@ const ESCALA = 4;
 // o que vem depois dele ainda é "ainda não passou". Uma quadra e meia.
 const ALCANCE_PREVISTO = 90;
 
+// O mapa desenha uma área maior do que cabe na tela; o zoom recorta um pedaço
+const MUNDO = { w: 780, h: 620 };
+const VISTA = { w: 390, h: 260 };
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 3;
+const ZOOM_PADRAO = 1.6;
+
 // Onde o morador está no mapa: cada bairro tem seu ponto
 function pontoUsuario() {
     return REGIOES[estado.regiao].ponto;
 }
 
 const REGIOES = {
+    umarizal: {
+        nome: 'Umarizal', endereco: 'Av. Visc. de Souza Franco, 620',
+        ponto: { x: 238.5, y: 24.8 },
+        comum: [1, 3, 5], seletiva: [6],
+        janela: '06:00 – 09:00', janelaSeletiva: '13:00 – 16:00', caminhao: 'CT-052'
+    },
+    reduto: {
+        nome: 'Reduto', endereco: 'Trav. Quintino Bocaiúva, 145',
+        ponto: { x: 245.0, y: 116.6 },
+        comum: [2, 4, 6], seletiva: [3],
+        janela: '05:30 – 08:30', janelaSeletiva: '14:00 – 17:00', caminhao: 'CT-063'
+    },
     campina: {
-        nome: 'Campina',
-        endereco: 'Trav. Campos Sales, 210',
-        ponto: { x: 228, y: 110 },
-        comum: [1, 3, 5],        // segunda, quarta, sexta
-        seletiva: [6],           // sábado
-        janela: '06:00 – 09:00',
-        janelaSeletiva: '13:00 – 16:00',
-        caminhao: 'CT-104'
+        nome: 'Campina', endereco: 'Trav. Campos Sales, 210',
+        ponto: { x: 251.4, y: 208.3 },
+        comum: [1, 3, 5], seletiva: [6],
+        janela: '06:00 – 09:00', janelaSeletiva: '13:00 – 16:00', caminhao: 'CT-104'
     },
     cidadevelha: {
-        nome: 'Cidade Velha',
-        endereco: 'Rua Siqueira Mendes, 84',
-        ponto: { x: 172, y: 206 },
-        comum: [2, 4, 6],        // terça, quinta, sábado
-        seletiva: [3],           // quarta
-        janela: '05:30 – 08:30',
-        janelaSeletiva: '14:00 – 17:00',
-        caminhao: 'CT-118'
+        nome: 'Cidade Velha', endereco: 'Rua Siqueira Mendes, 84',
+        ponto: { x: 261.0, y: 346.0 },
+        comum: [2, 4, 6], seletiva: [3],
+        janela: '05:30 – 08:30', janelaSeletiva: '14:00 – 17:00', caminhao: 'CT-118'
     },
     nazare: {
-        nome: 'Nazaré',
-        endereco: 'Av. Gentil Bittencourt, 1450',
-        ponto: { x: 348, y: 56 },
-        comum: [2, 4, 6],
-        seletiva: [5],           // sexta
-        janela: '07:00 – 10:00',
-        janelaSeletiva: '15:00 – 18:00',
-        caminhao: 'CT-090'
+        nome: 'Nazaré', endereco: 'Av. Gentil Bittencourt, 1450',
+        ponto: { x: 427.3, y: 57.7 },
+        comum: [2, 4, 6], seletiva: [5],
+        janela: '07:00 – 10:00', janelaSeletiva: '15:00 – 18:00', caminhao: 'CT-090'
+    },
+    saobras: {
+        nome: 'São Brás', endereco: 'Av. José Bonifácio, 330',
+        ponto: { x: 612.8, y: 44.7 },
+        comum: [1, 3, 5], seletiva: [4],
+        janela: '06:30 – 09:30', janelaSeletiva: '14:30 – 17:30', caminhao: 'CT-071'
     },
     batistacampos: {
-        nome: 'Batista Campos',
-        endereco: 'Trav. Padre Eutíquio, 780',
-        ponto: { x: 350, y: 148 },
-        comum: [1, 3, 5],
-        seletiva: [4],           // quinta
-        janela: '06:30 – 09:30',
-        janelaSeletiva: '14:30 – 17:30',
-        caminhao: 'CT-076'
+        nome: 'Batista Campos', endereco: 'Trav. Padre Eutíquio, 780',
+        ponto: { x: 436.9, y: 195.4 },
+        comum: [1, 3, 5], seletiva: [4],
+        janela: '06:30 – 09:30', janelaSeletiva: '14:30 – 17:30', caminhao: 'CT-076'
+    },
+    jurunas: {
+        nome: 'Jurunas', endereco: 'Trav. Roberto Camelier, 512',
+        ponto: { x: 387.9, y: 383.2 },
+        comum: [2, 4, 6], seletiva: [3],
+        janela: '05:00 – 08:00', janelaSeletiva: '13:30 – 16:30', caminhao: 'CT-085'
+    },
+    guama: {
+        nome: 'Guamá', endereco: 'Trav. Barão do Triunfo, 2100',
+        ponto: { x: 576.7, y: 416.2 },
+        comum: [1, 3, 5], seletiva: [2],
+        janela: '07:30 – 10:30', janelaSeletiva: '15:30 – 18:30', caminhao: 'CT-099'
     }
 };
 
@@ -68,60 +89,58 @@ const MESES_MIN = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', '
 // Cada rota acompanha as ruas desenhadas no mapa
 const CAMINHOES = [
     {
-        id: 'ct104',
-        nome: 'Caminhão CT-104',
-        setor: 'Setor Campina',
-        cor: '#1F7A45',
-        velocidade: 1.6,
-        progresso: 0.46,
-        voltas: 0,
-        rota: [
-            { x: 98.3, y: 107.5 }, { x: 160.1, y: 103.1 }, { x: 156.9, y: 57.2 },
-            { x: 218.8, y: 52.9 }, { x: 222.0, y: 98.8 }
-        ],
-        ruas: ['Blvd. Castilhos França', 'Rua Santo Antônio', 'Av. Presidente Vargas', 'Trav. Campos Sales']
+        id: 'ct052', nome: 'Caminhão CT-052', setor: 'Setor Umarizal',
+        cor: '#2FA85A', velocidade: 1.4, progresso: 0.3, voltas: 0,
+        rota: [{ x: 156.9, y: 57.2 }, { x: 280.6, y: 48.6 }, { x: 277.4, y: 2.7 }, { x: 215.5, y: 7.0 }],
+        ruas: ['Av. Sen. Lemos', 'Trav. Rui Barbosa', 'Av. Visc. de Souza Franco']
     },
     {
-        id: 'ct118',
-        nome: 'Caminhão CT-118',
-        setor: 'Setor Cidade Velha',
-        cor: '#2FA85A',
-        velocidade: 1.1,
-        progresso: 0.30,
-        voltas: 0,
-        rota: [
-            { x: 163.3, y: 149.0 }, { x: 101.5, y: 153.3 }, { x: 104.7, y: 199.2 },
-            { x: 166.5, y: 194.9 }
-        ],
-        ruas: ['Rua Padre Champagnat', 'Rua Dr. Malcher', 'Rua Siqueira Mendes']
+        id: 'ct063', nome: 'Caminhão CT-063', setor: 'Setor Reduto',
+        cor: '#2FA85A', velocidade: 1.2, progresso: 0.55, voltas: 0,
+        rota: [{ x: 163.3, y: 149.0 }, { x: 287.0, y: 140.4 }, { x: 283.8, y: 94.5 }, { x: 222.0, y: 98.8 }],
+        ruas: ['Av. Assis de Vasconcelos', 'Trav. Quintino Bocaiúva', 'Blvd. Castilhos França']
     },
     {
-        id: 'ct090',
-        nome: 'Caminhão CT-090',
-        setor: 'Setor Nazaré',
-        cor: '#2FA85A',
-        velocidade: 1.3,
-        progresso: 0.22,
-        voltas: 0,
-        rota: [
-            { x: 345.7, y: 90.2 }, { x: 283.8, y: 94.5 }, { x: 280.6, y: 48.6 },
-            { x: 342.5, y: 44.3 }
-        ],
+        id: 'ct104', nome: 'Caminhão CT-104', setor: 'Setor Campina',
+        cor: '#2FA85A', velocidade: 1.6, progresso: 0.46, voltas: 0,
+        rota: [{ x: 169.7, y: 240.8 }, { x: 293.4, y: 232.1 }, { x: 290.2, y: 186.3 }, { x: 228.4, y: 190.6 }],
+        ruas: ['Blvd. Castilhos França', 'Rua Santo Antônio', 'Trav. Campos Sales']
+    },
+    {
+        id: 'ct118', nome: 'Caminhão CT-118', setor: 'Setor Cidade Velha',
+        cor: '#2FA85A', velocidade: 1.1, progresso: 0.3, voltas: 0,
+        rota: [{ x: 173.0, y: 286.7 }, { x: 176.2, y: 332.6 }, { x: 238.0, y: 328.2 }],
+        ruas: ['Rua Padre Champagnat', 'Rua Siqueira Mendes']
+    },
+    {
+        id: 'ct090', nome: 'Caminhão CT-090', setor: 'Setor Nazaré',
+        cor: '#2FA85A', velocidade: 1.3, progresso: 0.22, voltas: 0,
+        rota: [{ x: 345.7, y: 90.2 }, { x: 469.4, y: 81.5 }, { x: 466.2, y: 35.6 }, { x: 404.3, y: 39.9 }],
         ruas: ['Av. Nazaré', 'Trav. 14 de Março', 'Av. Gentil Bittencourt']
     },
     {
-        id: 'ct076',
-        nome: 'Caminhão CT-076',
-        setor: 'Setor Batista Campos',
-        cor: '#8A968D',
-        velocidade: 0,          // ainda não saiu da garagem
-        progresso: 0,
-        voltas: 0,
-        rota: [
-            { x: 228.4, y: 190.6 }, { x: 290.2, y: 186.3 }, { x: 287.0, y: 140.4 },
-            { x: 348.9, y: 136.0 }
-        ],
+        id: 'ct071', nome: 'Caminhão CT-071', setor: 'Setor São Brás',
+        cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
+        rota: [{ x: 534.4, y: 123.1 }, { x: 658.1, y: 114.4 }, { x: 651.7, y: 22.6 }, { x: 589.8, y: 27.0 }],
+        ruas: ['Av. Almirante Barroso', 'Trav. Mauriti', 'Av. José Bonifácio']
+    },
+    {
+        id: 'ct076', nome: 'Caminhão CT-076', setor: 'Setor Batista Campos',
+        cor: '#2FA85A', velocidade: 1.5, progresso: 0.38, voltas: 0,
+        rota: [{ x: 355.3, y: 227.8 }, { x: 479.0, y: 219.2 }, { x: 475.8, y: 173.3 }, { x: 413.9, y: 177.6 }],
         ruas: ['Rua dos Mundurucus', 'Trav. Padre Eutíquio', 'Av. Gov. José Malcher']
+    },
+    {
+        id: 'ct085', nome: 'Caminhão CT-085', setor: 'Setor Jurunas',
+        cor: '#2FA85A', velocidade: 1.25, progresso: 0.62, voltas: 0,
+        rota: [{ x: 306.3, y: 415.7 }, { x: 430.0, y: 407.0 }, { x: 426.8, y: 361.2 }, { x: 364.9, y: 365.5 }],
+        ruas: ['Rua Nova', 'Trav. Roberto Camelier', 'Av. Bernardo Sayão']
+    },
+    {
+        id: 'ct099', nome: 'Caminhão CT-099', setor: 'Setor Guamá',
+        cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
+        rota: [{ x: 495.0, y: 448.6 }, { x: 618.7, y: 440.0 }, { x: 615.5, y: 394.1 }, { x: 553.7, y: 398.4 }],
+        ruas: ['Av. Perimetral', 'Trav. Barão do Triunfo', 'Rua Augusto Corrêa']
     }
 ];
 
@@ -164,6 +183,7 @@ let estado = {
     tela: 'mapa',
     regiao: 'campina',
     caminhaoSelecionado: 'ct104',
+    mapa: { zoom: ZOOM_PADRAO, cx: 251.4, cy: 208.3 },
     seguindo: true,
     mesVisivel: new Date().getMonth(),
     anoVisivel: new Date().getFullYear(),
@@ -417,14 +437,16 @@ function montarFrota() {
     });
 
     // Localização do morador (acompanha o bairro escolhido)
-    svg += '<circle id="halo-usuario" r="16" fill="#1F7AEC" opacity="0.16" />';
-    svg += '<circle id="ponto-usuario" r="7" fill="#1F7AEC" stroke="#FFFFFF" stroke-width="3" />';
+    svg += '<g id="grupo-usuario">' +
+        '<circle r="16" fill="#1F7AEC" opacity="0.16" />' +
+        '<circle r="7" fill="#1F7AEC" stroke="#FFFFFF" stroke-width="3" />' +
+    '</g>';
 
     CAMINHOES.forEach(function (caminhao) {
         svg += '<g class="caminhao-marcador" id="marcador-' + caminhao.id + '" tabindex="0" role="button">' +
             '<circle id="halo-' + caminhao.id + '" r="24" fill="' + caminhao.cor + '" opacity="0.14" />' +
-            '<circle id="corpo-' + caminhao.id + '" r="17" fill="' + caminhao.cor + '" stroke="#FFFFFF" stroke-width="3" />' +
-            '<use id="icone-' + caminhao.id + '" href="#ic-caminhao" width="18" height="18" fill="none" ' +
+            '<circle r="17" fill="' + caminhao.cor + '" stroke="#FFFFFF" stroke-width="3" />' +
+            '<use href="#ic-caminhao" x="-9" y="-9" width="18" height="18" fill="none" ' +
             'stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />' +
         '</g>';
     });
@@ -452,13 +474,15 @@ function montarFrota() {
 
 function atualizarFrota() {
     const eu = pontoUsuario();
-    ['halo-usuario', 'ponto-usuario'].forEach(function (id) {
-        const alvo = document.getElementById(id);
-        if (alvo) {
-            alvo.setAttribute('cx', eu.x);
-            alvo.setAttribute('cy', eu.y);
-        }
-    });
+    // Marcadores e traços encolhem na mesma medida em que o mapa cresce, para
+    // manterem o tamanho aparente em qualquer nível de aproximação
+    const escala = 1 / estado.mapa.zoom;
+
+    const grupoUsuario = document.getElementById('grupo-usuario');
+    if (grupoUsuario) {
+        grupoUsuario.setAttribute('transform',
+            'translate(' + eu.x + ',' + eu.y + ') scale(' + escala + ')');
+    }
 
     CAMINHOES.forEach(function (caminhao) {
         const total = comprimentoRota(caminhao.rota);
@@ -474,33 +498,30 @@ function atualizarFrota() {
         const ateOndePrevisto = caminhao.velocidade === 0
             ? 0
             : Math.min(andado + ALCANCE_PREVISTO, total);
-        const desenhar = function (alvo, de, ate) {
+        const desenhar = function (alvo, de, ate, largura, tracejado) {
             const pedaco = trechoRota(caminhao.rota, de, ate);
             alvo.setAttribute('d', pedaco.length > 1 ? paraD(pedaco) : '');
             alvo.setAttribute('opacity', opacidade);
+            alvo.setAttribute('stroke-width', (largura * escala).toFixed(2));
+            if (tracejado) {
+                alvo.setAttribute('stroke-dasharray',
+                    (tracejado[0] * escala).toFixed(2) + ' ' + (tracejado[1] * escala).toFixed(2));
+            }
         };
 
-        desenhar(passou, 0, caminhao.velocidade === 0 ? 0 : andado);
-        desenhar(prevista, caminhao.velocidade === 0 ? 0 : andado, ateOndePrevisto);
-        desenhar(pendente, ateOndePrevisto, total);
+        desenhar(passou, 0, caminhao.velocidade === 0 ? 0 : andado, 5, null);
+        desenhar(prevista, caminhao.velocidade === 0 ? 0 : andado, ateOndePrevisto, 5, [9, 9]);
+        desenhar(pendente, ateOndePrevisto, total, 4.5, [2, 9]);
 
         const ponto = pontoEm(caminhao.rota, andado);
+        const marcador = document.getElementById('marcador-' + caminhao.id);
+        marcador.setAttribute('transform',
+            'translate(' + ponto.x.toFixed(1) + ',' + ponto.y.toFixed(1) + ') scale(' + escala.toFixed(3) + ')');
+        marcador.setAttribute('aria-label', caminhao.nome + ', ' + textoSituacao(caminhao));
+
         const halo = document.getElementById('halo-' + caminhao.id);
-        halo.setAttribute('cx', ponto.x);
-        halo.setAttribute('cy', ponto.y);
         halo.setAttribute('r', selecionado ? 27 : 24);
         halo.setAttribute('opacity', selecionado ? 0.32 : 0.14);
-
-        const corpo = document.getElementById('corpo-' + caminhao.id);
-        corpo.setAttribute('cx', ponto.x);
-        corpo.setAttribute('cy', ponto.y);
-
-        const icone = document.getElementById('icone-' + caminhao.id);
-        icone.setAttribute('x', ponto.x - 9);
-        icone.setAttribute('y', ponto.y - 9);
-
-        document.getElementById('marcador-' + caminhao.id)
-            .setAttribute('aria-label', caminhao.nome + ', ' + textoSituacao(caminhao));
     });
 }
 
@@ -513,6 +534,107 @@ function destacarUsuario() {
     halo.classList.remove('pulso');
     void halo.getBoundingClientRect();   // força o navegador a reiniciar a animação
     halo.classList.add('pulso');
+}
+
+/* ---------- Aproximar, afastar e arrastar o mapa ---------- */
+
+function aplicarVista() {
+    const svg = document.querySelector('.mapa__svg');
+    if (!svg) {
+        return;
+    }
+
+    const zoom = estado.mapa.zoom;
+    const largura = VISTA.w / zoom;
+    const altura = VISTA.h / zoom;
+
+    // A vista não escapa dos limites do mundo desenhado
+    estado.mapa.cx = largura >= MUNDO.w
+        ? MUNDO.w / 2
+        : Math.max(largura / 2, Math.min(MUNDO.w - largura / 2, estado.mapa.cx));
+    estado.mapa.cy = altura >= MUNDO.h
+        ? MUNDO.h / 2
+        : Math.max(altura / 2, Math.min(MUNDO.h - altura / 2, estado.mapa.cy));
+
+    svg.setAttribute('viewBox',
+        (estado.mapa.cx - largura / 2).toFixed(1) + ' ' +
+        (estado.mapa.cy - altura / 2).toFixed(1) + ' ' +
+        largura.toFixed(1) + ' ' + altura.toFixed(1));
+
+    if (frotaMontada) {
+        atualizarFrota();
+    }
+}
+
+function zoomPara(novo, focoX, focoY) {
+    const limitado = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, novo));
+    if (focoX !== undefined) {
+        // mantém o ponto sob o cursor parado enquanto aproxima
+        const razao = 1 - estado.mapa.zoom / limitado;
+        estado.mapa.cx += (focoX - estado.mapa.cx) * razao;
+        estado.mapa.cy += (focoY - estado.mapa.cy) * razao;
+    }
+    estado.mapa.zoom = limitado;
+    aplicarVista();
+}
+
+function centralizarNoMorador() {
+    const eu = pontoUsuario();
+    estado.mapa.cx = eu.x;
+    estado.mapa.cy = eu.y;
+    estado.mapa.zoom = ZOOM_PADRAO;
+    aplicarVista();
+}
+
+// Converte um ponto da tela para as coordenadas do mapa
+function pontoNoMapa(svg, clientX, clientY) {
+    const caixa = svg.getBoundingClientRect();
+    const largura = VISTA.w / estado.mapa.zoom;
+    const altura = VISTA.h / estado.mapa.zoom;
+    return {
+        x: estado.mapa.cx - largura / 2 + ((clientX - caixa.left) / caixa.width) * largura,
+        y: estado.mapa.cy - altura / 2 + ((clientY - caixa.top) / caixa.height) * altura
+    };
+}
+
+function ligarGestosDoMapa() {
+    const svg = document.querySelector('.mapa__svg');
+    let arrastando = null;
+
+    svg.addEventListener('pointerdown', function (evento) {
+        arrastando = { x: evento.clientX, y: evento.clientY };
+    });
+
+    svg.addEventListener('pointermove', function (evento) {
+        if (!arrastando) {
+            return;
+        }
+        const caixa = svg.getBoundingClientRect();
+        const porPixel = (VISTA.w / estado.mapa.zoom) / caixa.width;
+        estado.mapa.cx -= (evento.clientX - arrastando.x) * porPixel;
+        estado.mapa.cy -= (evento.clientY - arrastando.y) * porPixel;
+        arrastando = { x: evento.clientX, y: evento.clientY };
+        aplicarVista();
+    });
+
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (nome) {
+        svg.addEventListener(nome, function () {
+            arrastando = null;
+        });
+    });
+
+    svg.addEventListener('wheel', function (evento) {
+        evento.preventDefault();
+        const alvo = pontoNoMapa(svg, evento.clientX, evento.clientY);
+        zoomPara(estado.mapa.zoom * (evento.deltaY < 0 ? 1.14 : 0.88), alvo.x, alvo.y);
+    }, { passive: false });
+
+    document.getElementById('botao-aproximar').addEventListener('click', function () {
+        zoomPara(estado.mapa.zoom * 1.4);
+    });
+    document.getElementById('botao-afastar').addEventListener('click', function () {
+        zoomPara(estado.mapa.zoom / 1.4);
+    });
 }
 
 function desenharFrota() {
@@ -1408,7 +1530,7 @@ function trocarRegiao(id) {
     desenharStatus();
     desenharListaColetas();
     if (frotaMontada) {
-        atualizarFrota();
+        centralizarNoMorador();
         desenharCartaoCaminhao();
     }
 }
@@ -1486,18 +1608,7 @@ function iniciar() {
     document.getElementById('ir-calendario').addEventListener('click', function () {
         irPara('calendario');
     });
-    document.getElementById('botao-centralizar').addEventListener('click', function () {
-        // Traz o foco de volta para o caminhão que atende o bairro do morador
-        const daRegiao = CAMINHOES.find(function (c) {
-            return c.nome.indexOf(REGIOES[estado.regiao].caminhao) >= 0;
-        });
-        if (daRegiao) {
-            estado.caminhaoSelecionado = daRegiao.id;
-        }
-        atualizarFrota();
-        desenharCartaoCaminhao();
-        destacarUsuario();
-    });
+    document.getElementById('botao-centralizar').addEventListener('click', centralizarNoMorador);
     document.getElementById('mes-anterior').addEventListener('click', function () {
         estado.mesVisivel--;
         if (estado.mesVisivel < 0) {
@@ -1539,9 +1650,11 @@ function iniciar() {
     });
 
     recomporAvisos();
+    ligarGestosDoMapa();
     desenharMeusRelatos();
     desenharStatus();
     desenharFrota();
+    centralizarNoMorador();
     desenharCartaoCaminhao();
     desenharListaColetas();
     desenharChipsRegiao();

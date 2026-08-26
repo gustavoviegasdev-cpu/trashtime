@@ -72,6 +72,10 @@ originou o app, e não fazem parte da aplicação.
   Um caminhão que não saiu tem a rota inteira em cinza.
 - Tocar num caminhão seleciona; tocar no cartão abre o **itinerário** com as ruas
   da rota, o horário em que cada uma foi atendida e a estimativa das que faltam.
+- O mapa **aproxima e afasta** pelos botões, pela roda do mouse ou arrastando
+  para deslocar. Os marcadores e os traços mantêm o tamanho aparente em qualquer
+  nível de aproximação, então a leitura não muda. O botão de mira volta ao seu
+  bairro.
 - O tempo de chegada é calculado a partir da distância que falta e da velocidade
   do caminhão — não é um texto fixo.
 - Os horários do itinerário saem da **janela de coleta do bairro**, distribuídos
@@ -89,8 +93,9 @@ originou o app, e não fazem parte da aplicação.
 
 ### Calendário
 - Gerado a partir do calendário real: navega por qualquer mês e ano.
-- Cada região tem sua própria regra de dias, diferenciando **coleta comum** de
-  **coleta seletiva**.
+- São **nove bairros** de Belém: Umarizal, Reduto, Campina, Cidade Velha,
+  Nazaré, São Brás, Batista Campos, Jurunas e Guamá. Cada um tem sua própria
+  regra de dias, diferenciando **coleta comum** de **coleta seletiva**.
 - Dia futuro mostra o previsto. Dia passado mostra o que aconteceu: horário real
   e situação (realizada, com atraso, não realizada).
 - A lista **Últimas coletas** resume as quatro passagens mais recentes.
@@ -123,6 +128,12 @@ não se reescreve a cada vez que o app abre.
 
 A escala do mapa é de 1 unidade para 4 metros, e é ela que dá sentido à
 configuração de distância do alerta.
+
+O desenho cobre a península de Belém: a Baía do Guajará a oeste e o Rio Guamá
+ao sul, com os bairros distribuídos como na cidade — a orla do Umarizal ao
+Cidade Velha, o miolo em Nazaré e São Brás, e a faixa ribeirinha do Jurunas ao
+Guamá. A área desenhada é maior do que a tela, e é o zoom que recorta o pedaço
+visível.
 
 A malha viária não é desenhada à mão: todas as vias saem de um único ângulo
 (-4°), de uma origem e de um espaçamento fixo, e os pontos das rotas são

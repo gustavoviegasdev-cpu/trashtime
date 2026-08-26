@@ -1829,3 +1829,20 @@ button {
 .pulso {
     animation: pulso-local 1.1s ease-out 2;
 }
+
+/* Aproximar e afastar o mapa */
+.botao-zoom {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+
+.mapa__svg {
+    touch-action: none;
+    cursor: grab;
+}
+
+.mapa__svg:active {
+    cursor: grabbing;
+}
