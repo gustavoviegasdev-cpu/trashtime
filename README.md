@@ -70,8 +70,6 @@ originou o app, e não fazem parte da aplicação.
   passou** (verde cheio, atrás dele), **rota prevista** (verde tracejado, o
   trecho logo à frente) e **ainda não passou** (cinza pontilhado, o resto).
   Um caminhão que não saiu tem a rota inteira em cinza.
-- As quatro zonas de bairro aparecem desenhadas e nomeadas, alinhadas à mesma
-  malha, para dar para ver qual rota atende qual bairro.
 - Tocar num caminhão seleciona; tocar no cartão abre o **itinerário** com as ruas
   da rota, o horário em que cada uma foi atendida e a estimativa das que faltam.
 - O tempo de chegada é calculado a partir da distância que falta e da velocidade
