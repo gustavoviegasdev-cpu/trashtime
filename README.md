@@ -1,9 +1,16 @@
 # TrashTime
 
-Aplicativo de acompanhamento da coleta de lixo urbana. Mostra em tempo real onde
-estão os caminhões, por onde já passaram e o que ainda falta, informa os dias e
-horários de coleta de cada bairro, avisa quando o caminhão se aproxima e permite
-ao morador registrar um problema quando o serviço falha.
+Aplicativo de acompanhamento da coleta de lixo urbana, ambientado no **centro de
+Belém do Pará**. Mostra em tempo real onde estão os caminhões, por onde já
+passaram e o que ainda falta, informa os dias e horários de coleta de cada
+bairro, avisa quando o caminhão se aproxima e permite ao morador registrar um
+problema quando o serviço falha.
+
+Os bairros atendidos são **Campina**, **Cidade Velha**, **Nazaré** e **Batista
+Campos**, e o mapa reproduz a orla da Baía do Guajará, que é o que define o
+desenho do centro da cidade. As ruas dos itinerários são reais: Boulevard
+Castilhos França, Avenida Presidente Vargas, Rua Siqueira Mendes, Avenida
+Gentil Bittencourt, entre outras.
 
 ## Como abrir
 
@@ -65,6 +72,15 @@ originou o app, e não fazem parte da aplicação.
   da rota, o horário em que cada uma foi atendida e a estimativa das que faltam.
 - O tempo de chegada é calculado a partir da distância que falta e da velocidade
   do caminhão — não é um texto fixo.
+
+### Bairros e localização
+- Cada bairro tem sua própria regra de dias, janela de horário, caminhão e
+  ponto no mapa.
+- Ao trocar de bairro, o mapa acompanha: sua localização se move, o caminhão em
+  destaque passa a ser o que atende aquela região e o alerta de aproximação
+  volta a valer para ele.
+- O botão de alvo no mapa devolve o foco ao caminhão do seu bairro e pisca a
+  sua localização.
 
 ### Calendário
 - Gerado a partir do calendário real: navega por qualquer mês e ano.

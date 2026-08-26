@@ -92,7 +92,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="rotulo">Caminhões ativos</p>
+                        <p class="rotulo">Caminhões em rota</p>
                         <p class="numerao" id="qtd-caminhoes">0</p>
                         <p class="rotulo" id="regiao-status">na sua região</p>
                     </div>
@@ -117,28 +117,41 @@
             <div class="mapa">
                 <svg class="mapa__svg" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice">
                     <rect x="0" y="0" width="390" height="260" fill="#E9EDEA" />
-                    <path d="M336 -12 C350 46 322 96 352 148 C372 186 358 224 384 272" stroke="#CDE3F2"
-                        stroke-width="30" fill="none" stroke-linecap="round" />
-                    <rect x="96" y="12" width="52" height="32" rx="9" fill="#D7E8DB" />
-                    <rect x="16" y="112" width="44" height="30" rx="8" fill="#D7E8DB" />
-                    <rect x="188" y="196" width="58" height="34" rx="10" fill="#D7E8DB" />
+
+                    <!-- malha viária do centro, correndo paralela e perpendicular à orla -->
                     <g stroke="#FFFFFF" stroke-linecap="round" fill="none">
-                        <path d="M-12 36 L402 22" stroke-width="7" />
-                        <path d="M-12 92 L402 76" stroke-width="6" />
-                        <path d="M-12 152 L402 136" stroke-width="8" />
-                        <path d="M-12 212 L402 196" stroke-width="5" />
-                        <path d="M60 -12 L78 272" stroke-width="6" />
-                        <path d="M128 -12 L146 272" stroke-width="8" />
-                        <path d="M196 -12 L214 272" stroke-width="5" />
-                        <path d="M264 -12 L282 272" stroke-width="6" />
-                        <path d="M332 -12 L350 272" stroke-width="5" />
+                        <path d="M40 26 L400 14" stroke-width="6" />
+                        <path d="M46 72 L400 58" stroke-width="7" />
+                        <path d="M54 118 L400 102" stroke-width="6" />
+                        <path d="M62 164 L400 146" stroke-width="8" />
+                        <path d="M70 210 L400 190" stroke-width="6" />
+                        <path d="M78 252 L400 232" stroke-width="5" />
+                        <path d="M40 -10 L70 270" stroke-width="5" />
+                        <path d="M104 -10 L132 270" stroke-width="6" />
+                        <path d="M168 -10 L196 270" stroke-width="8" />
+                        <path d="M232 -10 L258 270" stroke-width="6" />
+                        <path d="M296 -10 L320 270" stroke-width="5" />
+                        <path d="M358 -10 L380 270" stroke-width="5" />
                     </g>
-                    <!-- rotas, caminhões e localização do usuário entram aqui pelo JS -->
+
+                    <!-- Baía do Guajará: a orla que define o centro de Belém -->
+                    <path d="M0 0 L52 0 C58 44 82 68 90 102 C96 130 80 160 88 190 C94 216 70 238 78 260 L0 260 Z"
+                        fill="#CDE3F2" />
+                    <path d="M52 0 C58 44 82 68 90 102 C96 130 80 160 88 190 C94 216 70 238 78 260"
+                        fill="none" stroke="#B3D4E8" stroke-width="2" />
+
+                    <!-- praças do centro -->
+                    <rect x="198" y="40" width="46" height="32" rx="9" fill="#D7E8DB" />
+                    <rect x="252" y="178" width="54" height="40" rx="11" fill="#D7E8DB" />
+                    <rect x="106" y="196" width="30" height="22" rx="7" fill="#D7E8DB" />
+                    <rect x="308" y="96" width="38" height="30" rx="9" fill="#D7E8DB" />
+
+                    <!-- rotas, caminhões e localização do morador entram aqui pelo JS -->
                     <g id="camada-frota"></g>
                 </svg>
 
                 <div class="mapa__controles">
-                    <button class="botao-flutuante" id="botao-centralizar" aria-label="Centralizar em você">
+                    <button class="botao-flutuante" id="botao-centralizar" aria-label="Ver o caminhão do meu bairro">
                         <svg class="icone" width="21" height="21">
                             <use href="#ic-alvo" />
                         </svg>

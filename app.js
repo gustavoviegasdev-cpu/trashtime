@@ -8,36 +8,51 @@
 // 1 unidade do mapa equivale a 4 metros
 const ESCALA = 4;
 
-// Onde o morador está no mapa
-const USUARIO = { x: 268, y: 158 };
+// Onde o morador está no mapa: cada bairro tem seu ponto
+function pontoUsuario() {
+    return REGIOES[estado.regiao].ponto;
+}
 
 const REGIOES = {
-    centro: {
-        nome: 'Centro',
-        endereco: 'Rua das Acácias, 128',
-        comum: [2, 4, 6],        // terça, quinta, sábado
-        seletiva: [3],           // quarta
+    campina: {
+        nome: 'Campina',
+        endereco: 'Trav. Campos Sales, 210',
+        ponto: { x: 212, y: 94 },
+        comum: [1, 3, 5],        // segunda, quarta, sexta
+        seletiva: [6],           // sábado
         janela: '06:00 – 09:00',
-        janelaSeletiva: '14:00 – 17:00',
-        caminhao: 'CT-118'
-    },
-    aurora: {
-        nome: 'Jd. Aurora',
-        endereco: 'Av. das Palmeiras, 940',
-        comum: [1, 3, 5],
-        seletiva: [6],
-        janela: '07:00 – 10:00',
         janelaSeletiva: '13:00 – 16:00',
         caminhao: 'CT-104'
     },
-    vilanova: {
-        nome: 'Vila Nova',
-        endereco: 'Rua Sete de Abril, 55',
-        comum: [2, 5],
-        seletiva: [4],
+    cidadevelha: {
+        nome: 'Cidade Velha',
+        endereco: 'Rua Siqueira Mendes, 84',
+        ponto: { x: 198, y: 200 },
+        comum: [2, 4, 6],        // terça, quinta, sábado
+        seletiva: [3],           // quarta
         janela: '05:30 – 08:30',
+        janelaSeletiva: '14:00 – 17:00',
+        caminhao: 'CT-118'
+    },
+    nazare: {
+        nome: 'Nazaré',
+        endereco: 'Av. Gentil Bittencourt, 1450',
+        ponto: { x: 356, y: 60 },
+        comum: [2, 4, 6],
+        seletiva: [5],           // sexta
+        janela: '07:00 – 10:00',
         janelaSeletiva: '15:00 – 18:00',
         caminhao: 'CT-090'
+    },
+    batistacampos: {
+        nome: 'Batista Campos',
+        endereco: 'Trav. Padre Eutíquio, 780',
+        ponto: { x: 336, y: 160 },
+        comum: [1, 3, 5],
+        seletiva: [4],           // quinta
+        janela: '06:30 – 09:30',
+        janelaSeletiva: '14:30 – 17:30',
+        caminhao: 'CT-076'
     }
 };
 
@@ -49,53 +64,68 @@ const MESES_MIN = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', '
 // Cada rota acompanha as ruas desenhadas no mapa
 const CAMINHOES = [
     {
-        id: 'ct118',
-        nome: 'Caminhão CT-118',
-        setor: 'Setor Centro',
-        cor: '#1F7A45',
-        velocidade: 1.8,
-        progresso: 0.52,
-        voltas: 0,
-        rota: [
-            { x: 62, y: 36 }, { x: 62, y: 92 }, { x: 130, y: 92 },
-            { x: 130, y: 152 }, { x: 200, y: 152 }, { x: 266, y: 156 }
-        ],
-        ruas: ['Rua das Palmeiras', 'Av. Brasil', 'Rua Sete de Setembro', 'Rua São João', 'Rua das Acácias']
-    },
-    {
         id: 'ct104',
         nome: 'Caminhão CT-104',
-        setor: 'Setor Norte',
-        cor: '#2FA85A',
-        velocidade: 1.2,
-        progresso: 0.18,
+        setor: 'Setor Campina',
+        cor: '#1F7A45',
+        velocidade: 1.6,
+        progresso: 0.46,
         voltas: 0,
         rota: [
-            { x: 340, y: 26 }, { x: 268, y: 30 }, { x: 268, y: 88 },
-            { x: 198, y: 92 }, { x: 198, y: 140 }
+            { x: 104, y: 104 }, { x: 140, y: 98 }, { x: 146, y: 62 },
+            { x: 198, y: 54 }, { x: 206, y: 92 }
         ],
-        ruas: ['Av. Getúlio Vargas', 'Rua Dom Pedro', 'Rua Marechal Deodoro', 'Rua das Oliveiras']
+        ruas: ['Blvd. Castilhos França', 'Rua Santo Antônio', 'Av. Presidente Vargas', 'Trav. Campos Sales']
+    },
+    {
+        id: 'ct118',
+        nome: 'Caminhão CT-118',
+        setor: 'Setor Cidade Velha',
+        cor: '#2FA85A',
+        velocidade: 1.1,
+        progresso: 0.30,
+        voltas: 0,
+        rota: [
+            { x: 100, y: 172 }, { x: 140, y: 166 }, { x: 148, y: 200 },
+            { x: 192, y: 194 }
+        ],
+        ruas: ['Rua Padre Champagnat', 'Rua Dr. Malcher', 'Rua Siqueira Mendes']
     },
     {
         id: 'ct090',
         nome: 'Caminhão CT-090',
-        setor: 'Setor Leste',
+        setor: 'Setor Nazaré',
+        cor: '#2FA85A',
+        velocidade: 1.3,
+        progresso: 0.22,
+        voltas: 0,
+        rota: [
+            { x: 238, y: 34 }, { x: 292, y: 26 }, { x: 300, y: 62 },
+            { x: 352, y: 54 }
+        ],
+        ruas: ['Av. Nazaré', 'Trav. 14 de Março', 'Av. Gentil Bittencourt']
+    },
+    {
+        id: 'ct076',
+        nome: 'Caminhão CT-076',
+        setor: 'Setor Batista Campos',
         cor: '#8A968D',
-        velocidade: 0,          // ainda não saiu
+        velocidade: 0,          // ainda não saiu da garagem
         progresso: 0,
         voltas: 0,
         rota: [
-            { x: 336, y: 196 }, { x: 268, y: 200 }, { x: 268, y: 240 }
+            { x: 216, y: 210 }, { x: 268, y: 202 }, { x: 276, y: 164 },
+            { x: 330, y: 156 }
         ],
-        ruas: ['Av. Leste', 'Rua Antônio Carlos']
+        ruas: ['Rua dos Mundurucus', 'Trav. Padre Eutíquio', 'Av. Gov. José Malcher']
     }
 ];
 
 const AVISOS_BASE = [
-    { id: 'a2', tipo: 'horario', titulo: 'Coleta de amanhã mudou', corpo: 'O Centro passa a ser coletado das 05:30 às 08:30.', quando: 'há 2 h' },
-    { id: 'a3', tipo: 'aviso', titulo: 'Mutirão de recicláveis', corpo: 'Entrega voluntária na Praça da Matriz, das 08:00 às 12:00.', quando: 'ontem' },
-    { id: 'a4', tipo: 'caminhao', titulo: 'Coleta concluída na rua', corpo: 'O CT-118 finalizou a Rua das Acácias às 07:12 de hoje.', quando: 'ontem' },
-    { id: 'a5', tipo: 'horario', titulo: 'Feriado altera a coleta', corpo: 'Não haverá coleta comum na segunda. Reposição na terça.', quando: 'há 3 dias' }
+    { id: 'a2', tipo: 'horario', titulo: 'Coleta de amanhã mudou', corpo: 'A Campina passa a ser coletada das 05:30 às 08:30.', quando: 'há 2 h' },
+    { id: 'a3', tipo: 'aviso', titulo: 'Mutirão de recicláveis', corpo: 'Entrega voluntária na Praça da República, das 08:00 às 12:00.', quando: 'ontem' },
+    { id: 'a4', tipo: 'caminhao', titulo: 'Coleta concluída na rua', corpo: 'O CT-104 finalizou a Trav. Campos Sales às 07:12 de hoje.', quando: 'ontem' },
+    { id: 'a5', tipo: 'aviso', titulo: 'Círio de Nazaré altera a coleta', corpo: 'No fim de semana do Círio, o entorno da Basílica tem coleta reforçada à noite.', quando: 'há 3 dias' }
 ];
 
 const FILTROS = [
@@ -128,8 +158,8 @@ const CHAVE_ARMAZENAMENTO = 'trashtime';
 
 let estado = {
     tela: 'mapa',
-    regiao: 'centro',
-    caminhaoSelecionado: 'ct118',
+    regiao: 'campina',
+    caminhaoSelecionado: 'ct104',
     seguindo: true,
     mesVisivel: new Date().getMonth(),
     anoVisivel: new Date().getFullYear(),
@@ -260,17 +290,19 @@ function metrosAteUsuario(caminhao) {
     let melhorAoLongo = 0;
     let acumulado = 0;
 
+    const eu = pontoUsuario();
+
     for (let i = 0; i < caminhao.rota.length - 1; i++) {
         const a = caminhao.rota[i];
         const b = caminhao.rota[i + 1];
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const trecho = Math.hypot(dx, dy);
-        let t = trecho === 0 ? 0 : ((USUARIO.x - a.x) * dx + (USUARIO.y - a.y) * dy) / (trecho * trecho);
+        let t = trecho === 0 ? 0 : ((eu.x - a.x) * dx + (eu.y - a.y) * dy) / (trecho * trecho);
         t = Math.max(0, Math.min(1, t));
         const px = a.x + dx * t;
         const py = a.y + dy * t;
-        const distancia = Math.hypot(USUARIO.x - px, USUARIO.y - py);
+        const distancia = Math.hypot(eu.x - px, eu.y - py);
 
         if (distancia < melhorDistancia) {
             melhorDistancia = distancia;
@@ -287,7 +319,8 @@ function metrosAteUsuario(caminhao) {
 function metrosDoUsuario(caminhao) {
     const total = comprimentoRota(caminhao.rota);
     const ponto = pontoEm(caminhao.rota, caminhao.progresso * total);
-    return Math.hypot(USUARIO.x - ponto.x, USUARIO.y - ponto.y) * ESCALA;
+    const eu = pontoUsuario();
+    return Math.hypot(eu.x - ponto.x, eu.y - ponto.y) * ESCALA;
 }
 
 function textoChegada(caminhao) {
@@ -378,9 +411,9 @@ function montarFrota() {
             'stroke-dasharray="' + (parado ? '2 9' : '9 9') + '" stroke-linecap="round" stroke-linejoin="round" />';
     });
 
-    // Localização do morador
-    svg += '<circle cx="' + USUARIO.x + '" cy="' + USUARIO.y + '" r="16" fill="#1F7AEC" opacity="0.16" />';
-    svg += '<circle cx="' + USUARIO.x + '" cy="' + USUARIO.y + '" r="7" fill="#1F7AEC" stroke="#FFFFFF" stroke-width="3" />';
+    // Localização do morador (acompanha o bairro escolhido)
+    svg += '<circle id="halo-usuario" r="16" fill="#1F7AEC" opacity="0.16" />';
+    svg += '<circle id="ponto-usuario" r="7" fill="#1F7AEC" stroke="#FFFFFF" stroke-width="3" />';
 
     CAMINHOES.forEach(function (caminhao) {
         svg += '<g class="caminhao-marcador" id="marcador-' + caminhao.id + '" tabindex="0" role="button">' +
@@ -413,6 +446,15 @@ function montarFrota() {
 }
 
 function atualizarFrota() {
+    const eu = pontoUsuario();
+    ['halo-usuario', 'ponto-usuario'].forEach(function (id) {
+        const alvo = document.getElementById(id);
+        if (alvo) {
+            alvo.setAttribute('cx', eu.x);
+            alvo.setAttribute('cy', eu.y);
+        }
+    });
+
     CAMINHOES.forEach(function (caminhao) {
         const total = comprimentoRota(caminhao.rota);
         const andado = caminhao.progresso * total;
@@ -451,6 +493,17 @@ function atualizarFrota() {
         document.getElementById('marcador-' + caminhao.id)
             .setAttribute('aria-label', caminhao.nome + ', ' + textoSituacao(caminhao));
     });
+}
+
+// Pisca a localização do morador para ele se achar no mapa
+function destacarUsuario() {
+    const halo = document.getElementById('halo-usuario');
+    if (!halo) {
+        return;
+    }
+    halo.classList.remove('pulso');
+    void halo.getBoundingClientRect();   // força o navegador a reiniciar a animação
+    halo.classList.add('pulso');
 }
 
 function desenharFrota() {
@@ -513,12 +566,13 @@ function desenharCartaoCaminhao() {
 }
 
 function desenharStatus() {
+    // Os caminhões atendem bairros diferentes, então o número é do centro inteiro
     const emRota = CAMINHOES.filter(function (c) {
         return c.velocidade > 0;
     }).length;
 
-    document.getElementById('qtd-caminhoes').textContent = emRota;
-    document.getElementById('regiao-status').textContent = 'em ' + REGIOES[estado.regiao].nome;
+    document.getElementById('qtd-caminhoes').textContent = emRota + ' de ' + CAMINHOES.length;
+    document.getElementById('regiao-status').textContent = 'em rota no centro';
 
     const proximas = proximasColetas(estado.regiao, 1);
     if (proximas.length > 0) {
@@ -1278,6 +1332,14 @@ function irPara(tela) {
 function trocarRegiao(id) {
     estado.regiao = id;
     alertaEnviado = {};
+
+    // O caminhão em destaque passa a ser o que atende o bairro escolhido
+    const daRegiao = CAMINHOES.find(function (c) {
+        return c.nome.indexOf(REGIOES[id].caminhao) >= 0;
+    });
+    if (daRegiao) {
+        estado.caminhaoSelecionado = daRegiao.id;
+    }
     salvarPreferencias();
     desenharChipsRegiao();
     desenharCalendario();
@@ -1286,6 +1348,10 @@ function trocarRegiao(id) {
     desenharConfiguracoes();
     desenharStatus();
     desenharListaColetas();
+    if (frotaMontada) {
+        atualizarFrota();
+        desenharCartaoCaminhao();
+    }
 }
 
 /* ---------- 11. Simulação do deslocamento ---------- */
@@ -1362,9 +1428,16 @@ function iniciar() {
         irPara('calendario');
     });
     document.getElementById('botao-centralizar').addEventListener('click', function () {
-        estado.caminhaoSelecionado = 'ct118';
-        desenharFrota();
+        // Traz o foco de volta para o caminhão que atende o bairro do morador
+        const daRegiao = CAMINHOES.find(function (c) {
+            return c.nome.indexOf(REGIOES[estado.regiao].caminhao) >= 0;
+        });
+        if (daRegiao) {
+            estado.caminhaoSelecionado = daRegiao.id;
+        }
+        atualizarFrota();
         desenharCartaoCaminhao();
+        destacarUsuario();
     });
     document.getElementById('mes-anterior').addEventListener('click', function () {
         estado.mesVisivel--;
