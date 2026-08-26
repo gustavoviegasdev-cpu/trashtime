@@ -119,6 +119,12 @@ não se reescreve a cada vez que o app abre.
 A escala do mapa é de 1 unidade para 4 metros, e é ela que dá sentido à
 configuração de distância do alerta.
 
+A malha viária não é desenhada à mão: todas as vias saem de um único ângulo
+(-4°), de uma origem e de um espaçamento fixo, e os pontos das rotas são
+exatamente os cruzamentos dessa malha. Cada trecho varia só uma das duas
+coordenadas da grade, então o caminhão anda sempre sobre uma rua, nunca cortando
+quadra na diagonal. As praças ocupam quadras inteiras e giram no mesmo ângulo.
+
 ## Limites honestos
 
 Este é um app **com dados simulados**:

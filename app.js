@@ -17,7 +17,7 @@ const REGIOES = {
     campina: {
         nome: 'Campina',
         endereco: 'Trav. Campos Sales, 210',
-        ponto: { x: 212, y: 94 },
+        ponto: { x: 228, y: 110 },
         comum: [1, 3, 5],        // segunda, quarta, sexta
         seletiva: [6],           // sábado
         janela: '06:00 – 09:00',
@@ -27,7 +27,7 @@ const REGIOES = {
     cidadevelha: {
         nome: 'Cidade Velha',
         endereco: 'Rua Siqueira Mendes, 84',
-        ponto: { x: 198, y: 200 },
+        ponto: { x: 172, y: 206 },
         comum: [2, 4, 6],        // terça, quinta, sábado
         seletiva: [3],           // quarta
         janela: '05:30 – 08:30',
@@ -37,7 +37,7 @@ const REGIOES = {
     nazare: {
         nome: 'Nazaré',
         endereco: 'Av. Gentil Bittencourt, 1450',
-        ponto: { x: 356, y: 60 },
+        ponto: { x: 348, y: 56 },
         comum: [2, 4, 6],
         seletiva: [5],           // sexta
         janela: '07:00 – 10:00',
@@ -47,7 +47,7 @@ const REGIOES = {
     batistacampos: {
         nome: 'Batista Campos',
         endereco: 'Trav. Padre Eutíquio, 780',
-        ponto: { x: 336, y: 160 },
+        ponto: { x: 350, y: 148 },
         comum: [1, 3, 5],
         seletiva: [4],           // quinta
         janela: '06:30 – 09:30',
@@ -72,8 +72,8 @@ const CAMINHOES = [
         progresso: 0.46,
         voltas: 0,
         rota: [
-            { x: 104, y: 104 }, { x: 140, y: 98 }, { x: 146, y: 62 },
-            { x: 198, y: 54 }, { x: 206, y: 92 }
+            { x: 98.3, y: 107.5 }, { x: 160.1, y: 103.1 }, { x: 156.9, y: 57.2 },
+            { x: 218.8, y: 52.9 }, { x: 222.0, y: 98.8 }
         ],
         ruas: ['Blvd. Castilhos França', 'Rua Santo Antônio', 'Av. Presidente Vargas', 'Trav. Campos Sales']
     },
@@ -86,8 +86,8 @@ const CAMINHOES = [
         progresso: 0.30,
         voltas: 0,
         rota: [
-            { x: 100, y: 172 }, { x: 140, y: 166 }, { x: 148, y: 200 },
-            { x: 192, y: 194 }
+            { x: 163.3, y: 149.0 }, { x: 101.5, y: 153.3 }, { x: 104.7, y: 199.2 },
+            { x: 166.5, y: 194.9 }
         ],
         ruas: ['Rua Padre Champagnat', 'Rua Dr. Malcher', 'Rua Siqueira Mendes']
     },
@@ -100,8 +100,8 @@ const CAMINHOES = [
         progresso: 0.22,
         voltas: 0,
         rota: [
-            { x: 238, y: 34 }, { x: 292, y: 26 }, { x: 300, y: 62 },
-            { x: 352, y: 54 }
+            { x: 345.7, y: 90.2 }, { x: 283.8, y: 94.5 }, { x: 280.6, y: 48.6 },
+            { x: 342.5, y: 44.3 }
         ],
         ruas: ['Av. Nazaré', 'Trav. 14 de Março', 'Av. Gentil Bittencourt']
     },
@@ -114,8 +114,8 @@ const CAMINHOES = [
         progresso: 0,
         voltas: 0,
         rota: [
-            { x: 216, y: 210 }, { x: 268, y: 202 }, { x: 276, y: 164 },
-            { x: 330, y: 156 }
+            { x: 228.4, y: 190.6 }, { x: 290.2, y: 186.3 }, { x: 287.0, y: 140.4 },
+            { x: 348.9, y: 136.0 }
         ],
         ruas: ['Rua dos Mundurucus', 'Trav. Padre Eutíquio', 'Av. Gov. José Malcher']
     }

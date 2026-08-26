@@ -118,33 +118,35 @@
                 <svg class="mapa__svg" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice">
                     <rect x="0" y="0" width="390" height="260" fill="#E9EDEA" />
 
-                    <!-- malha viária do centro, correndo paralela e perpendicular à orla -->
+                    <!-- Malha do centro. Todas as vias partem de um único ângulo (-4°) e de um
+                         espaçamento fixo, e é sobre os cruzamentos dela que as rotas correm. -->
                     <g stroke="#FFFFFF" stroke-linecap="round" fill="none">
-                        <path d="M40 26 L400 14" stroke-width="6" />
-                        <path d="M46 72 L400 58" stroke-width="7" />
-                        <path d="M54 118 L400 102" stroke-width="6" />
-                        <path d="M62 164 L400 146" stroke-width="8" />
-                        <path d="M70 210 L400 190" stroke-width="6" />
-                        <path d="M78 252 L400 232" stroke-width="5" />
-                        <path d="M40 -10 L70 270" stroke-width="5" />
-                        <path d="M104 -10 L132 270" stroke-width="6" />
-                        <path d="M168 -10 L196 270" stroke-width="8" />
-                        <path d="M232 -10 L258 270" stroke-width="6" />
-                        <path d="M296 -10 L320 270" stroke-width="5" />
-                        <path d="M358 -10 L380 270" stroke-width="5" />
+                        <path d="M-29.9 24.2 L449.0 -9.3" stroke-width="6" />
+                        <path d="M-26.6 70.1 L452.2 36.6" stroke-width="7" />
+                        <path d="M-23.4 116.0 L455.4 82.5" stroke-width="6" />
+                        <path d="M-20.2 161.8 L458.6 128.4" stroke-width="8" />
+                        <path d="M-17.0 207.7 L461.8 174.3" stroke-width="6" />
+                        <path d="M-13.8 253.6 L465.0 220.1" stroke-width="5" />
+                        <path d="M25.8 -39.9 L52.3 339.2" stroke-width="5" />
+                        <path d="M87.7 -44.2 L114.2 334.9" stroke-width="6" />
+                        <path d="M149.5 -48.5 L176.0 330.6" stroke-width="8" />
+                        <path d="M211.4 -52.8 L237.9 326.2" stroke-width="6" />
+                        <path d="M273.2 -57.2 L299.7 321.9" stroke-width="5" />
+                        <path d="M335.1 -61.5 L361.6 317.6" stroke-width="6" />
+                        <path d="M396.9 -65.8 L423.4 313.3" stroke-width="5" />
                     </g>
 
-                    <!-- Baía do Guajará: a orla que define o centro de Belém -->
-                    <path d="M0 0 L52 0 C58 44 82 68 90 102 C96 130 80 160 88 190 C94 216 70 238 78 260 L0 260 Z"
+                    <!-- Baía do Guajará: a orla que define o desenho do centro de Belém -->
+                    <path d="M0 0 L44 0 C50 38 68 64 74 100 C79 128 66 156 72 186 C77 212 56 234 62 260 L0 260 Z"
                         fill="#CDE3F2" />
-                    <path d="M52 0 C58 44 82 68 90 102 C96 130 80 160 88 190 C94 216 70 238 78 260"
+                    <path d="M44 0 C50 38 68 64 74 100 C79 128 66 156 72 186 C77 212 56 234 62 260"
                         fill="none" stroke="#B3D4E8" stroke-width="2" />
 
-                    <!-- praças do centro -->
-                    <rect x="198" y="40" width="46" height="32" rx="9" fill="#D7E8DB" />
-                    <rect x="252" y="178" width="54" height="40" rx="11" fill="#D7E8DB" />
-                    <rect x="106" y="196" width="30" height="22" rx="7" fill="#D7E8DB" />
-                    <rect x="308" y="96" width="38" height="30" rx="9" fill="#D7E8DB" />
+                    <!-- praças: quadras inteiras, giradas no mesmo ângulo da malha -->
+                    <rect x="166.4" y="63.0" width="46" height="30" rx="9" fill="#D7E8DB" transform="rotate(-4 189.4 78.0)" />
+                    <rect x="290.1" y="54.4" width="46" height="30" rx="9" fill="#D7E8DB" transform="rotate(-4 313.1 69.4)" />
+                    <rect x="111.0" y="159.1" width="46" height="30" rx="9" fill="#D7E8DB" transform="rotate(-4 134.0 174.1)" />
+                    <rect x="234.7" y="150.5" width="46" height="30" rx="9" fill="#D7E8DB" transform="rotate(-4 257.7 165.5)" />
 
                     <!-- rotas, caminhões e localização do morador entram aqui pelo JS -->
                     <g id="camada-frota"></g>
