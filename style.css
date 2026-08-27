@@ -208,10 +208,16 @@ button {
 /* ===== Mapa ===== */
 .mapa {
     position: relative;
-    height: 260px;
+    height: var(--altura-mapa, 296px);
     margin-top: 12px;
     background: #E9EDEA;
     overflow: hidden;
+}
+
+/* Só anima quando o mapa muda de tamanho sozinho; enquanto o dedo o arrasta
+   ele acompanha na hora, sem atraso. */
+.mapa--animando {
+    transition: height 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .mapa__svg {
@@ -224,6 +230,9 @@ button {
     position: absolute;
     top: 12px;
     right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .botao-flutuante {
@@ -242,7 +251,7 @@ button {
     position: absolute;
     left: 12px;
     right: 12px;
-    bottom: 10px;
+    bottom: 44px;
     background: var(--branco);
     border-radius: 12px;
     padding: 9px 11px;
@@ -1721,6 +1730,15 @@ button {
         border-radius: 18px;
     }
 
+    /* No computador o mapa já nasce grande: a alça de puxar não faz sentido */
+    .mapa__puxador {
+        display: none;
+    }
+
+    .legenda {
+        bottom: 12px;
+    }
+
     /* ---- calendário mais folgado ---- */
     .mes {
         padding: 2px 0 6px;
@@ -1845,4 +1863,96 @@ button {
 
 .mapa__svg:active {
     cursor: grabbing;
+}
+
+.mapa__svg:focus-visible {
+    outline: 3px solid var(--verde-escuro);
+    outline-offset: -3px;
+}
+
+.botao-flutuante:disabled {
+    opacity: 0.42;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* Marca quanto o mapa está aproximado; aparece só durante o gesto */
+.selo-zoom {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(15, 29, 20, 0.78);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 9px;
+    border-radius: 9px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
+}
+
+.selo-zoom--visivel {
+    opacity: 1;
+    transform: none;
+}
+
+/* ===== Alça: puxe o mapa para baixo para ampliá-lo ===== */
+.mapa__puxador {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.94) 40%, rgba(255, 255, 255, 0));
+    touch-action: none;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.mapa__puxador:active {
+    cursor: grabbing;
+}
+
+.mapa__puxador-alca {
+    width: 46px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--verde-escuro);
+    opacity: 0.34;
+    transition: width 0.18s ease, opacity 0.18s ease;
+}
+
+.mapa__puxador:active .mapa__puxador-alca,
+.mapa--expandido .mapa__puxador-alca {
+    width: 62px;
+    opacity: 0.6;
+}
+
+.mapa__puxador-texto {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--texto-medio);
+}
+
+.mapa__puxador:focus-visible {
+    outline: 3px solid var(--verde-escuro);
+    outline-offset: -3px;
+    border-radius: 12px;
+}
+
+/* As regras da alça foram escritas depois do bloco de computador, então o
+   "esconder" precisa vir aqui no fim para valer. */
+@media (min-width: 900px) {
+    .mapa__puxador {
+        display: none;
+    }
 }

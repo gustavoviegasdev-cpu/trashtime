@@ -19,6 +19,14 @@ const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 const ZOOM_PADRAO = 1.6;
 
+// No celular o mapa comeca recolhido e o morador puxa para baixo para amplia-lo.
+// Estas sao as duas alturas entre as quais ele se move.
+// A alca ocupa uma faixa embaixo do mapa; a altura recolhida cresce o mesmo
+// tanto para que a area util do desenho continue a mesma de antes.
+const MAPA_RECOLHIDO = 296;
+const MAPA_MARGEM_ABAIXO = 112;   // espaco que fica para o cartao do caminhao
+const LARGURA_CELULAR = 899;      // acima disso vale o layout de computador
+
 // Onde o morador está no mapa: cada bairro tem seu ponto
 function pontoUsuario() {
     return REGIOES[estado.regiao].ponto;
@@ -183,7 +191,7 @@ let estado = {
     tela: 'mapa',
     regiao: 'campina',
     caminhaoSelecionado: 'ct104',
-    mapa: { zoom: ZOOM_PADRAO, cx: 251.4, cy: 208.3 },
+    mapa: { zoom: ZOOM_PADRAO, cx: 251.4, cy: 208.3, expandido: false },
     seguindo: true,
     mesVisivel: new Date().getMonth(),
     anoVisivel: new Date().getFullYear(),
@@ -538,6 +546,17 @@ function destacarUsuario() {
 
 /* ---------- Aproximar, afastar e arrastar o mapa ---------- */
 
+// Quanto o mapa mostra depende do formato da caixa onde ele esta desenhado.
+// Quando o morador amplia o mapa no celular a caixa fica mais alta, e a janela
+// precisa acompanhar - senao a altura extra so cortaria as laterais.
+function formatoDaVista(svg) {
+    const caixa = svg.getBoundingClientRect();
+    if (caixa.width < 1 || caixa.height < 1) {
+        return VISTA.h / VISTA.w;
+    }
+    return caixa.height / caixa.width;
+}
+
 function aplicarVista() {
     const svg = document.querySelector('.mapa__svg');
     if (!svg) {
@@ -546,7 +565,7 @@ function aplicarVista() {
 
     const zoom = estado.mapa.zoom;
     const largura = VISTA.w / zoom;
-    const altura = VISTA.h / zoom;
+    const altura = largura * formatoDaVista(svg);
 
     // A vista não escapa dos limites do mundo desenhado
     estado.mapa.cx = largura >= MUNDO.w
@@ -564,6 +583,7 @@ function aplicarVista() {
     if (frotaMontada) {
         atualizarFrota();
     }
+    atualizarBotoesZoom();
 }
 
 function zoomPara(novo, focoX, focoY) {
@@ -590,51 +610,438 @@ function centralizarNoMorador() {
 function pontoNoMapa(svg, clientX, clientY) {
     const caixa = svg.getBoundingClientRect();
     const largura = VISTA.w / estado.mapa.zoom;
-    const altura = VISTA.h / estado.mapa.zoom;
+    const altura = largura * formatoDaVista(svg);
     return {
         x: estado.mapa.cx - largura / 2 + ((clientX - caixa.left) / caixa.width) * largura,
         y: estado.mapa.cy - altura / 2 + ((clientY - caixa.top) / caixa.height) * altura
     };
 }
 
+// ===== Toque, arrasto e zoom no mapa =====
+// O mapa responde a: um dedo arrasta, dois dedos aproximam, dois toques rapidos
+// aproximam de uma vez, e - so no celular - puxar para baixo amplia o mapa.
+
+function noCelular() {
+    return window.innerWidth <= LARGURA_CELULAR;
+}
+
+// Altura maxima que o mapa pode ocupar sem engolir a tela inteira: sobra
+// espaco para a barra de abas e para o cartao do caminhao logo abaixo.
+function alturaMaximaDoMapa() {
+    const abas = document.querySelector('.abas');
+    const alturaAbas = abas ? abas.getBoundingClientRect().height : 84;
+    const livre = window.innerHeight - alturaAbas - MAPA_MARGEM_ABAIXO;
+    return Math.max(MAPA_RECOLHIDO + 60, Math.round(livre));
+}
+
+function definirAlturaDoMapa(px) {
+    const mapa = document.querySelector('.mapa');
+    if (mapa) {
+        mapa.style.setProperty('--altura-mapa', Math.round(px) + 'px');
+    }
+}
+
+// Leva o mapa para um dos dois tamanhos, com animacao
+function ajustarMapa(expandido, animar) {
+    const mapa = document.querySelector('.mapa');
+    const puxador = document.getElementById('puxador-mapa');
+    if (!mapa) {
+        return;
+    }
+
+    estado.mapa.expandido = expandido;
+    mapa.classList.toggle('mapa--animando', animar !== false);
+    mapa.classList.toggle('mapa--expandido', expandido);
+    definirAlturaDoMapa(expandido ? alturaMaximaDoMapa() : MAPA_RECOLHIDO);
+
+    if (puxador) {
+        puxador.setAttribute('aria-expanded', expandido ? 'true' : 'false');
+        puxador.setAttribute('aria-label', expandido ? 'Recolher o mapa' : 'Ampliar o mapa');
+        const texto = puxador.querySelector('.mapa__puxador-texto');
+        if (texto) {
+            texto.textContent = expandido ? 'Arraste para recolher' : 'Arraste para ampliar';
+        }
+    }
+
+    // A caixa muda de formato, entao a janela do mapa tem que ser refeita.
+    // Uma durante a animacao e outra no fim, para nao ficar esticado no caminho.
+    aplicarVista();
+    window.setTimeout(aplicarVista, 60);
+    window.setTimeout(aplicarVista, 200);
+    window.setTimeout(function () {
+        mapa.classList.remove('mapa--animando');
+        aplicarVista();
+    }, 300);
+
+    // Ampliado, o mapa sobe para o alto da tela. A rolagem so acontece depois
+    // que ele ja cresceu - antes disso a pagina ainda e curta demais para subir.
+    if (expandido && animar !== false && noCelular()) {
+        window.setTimeout(function () {
+            const topo = mapa.getBoundingClientRect().top + window.scrollY - 8;
+            window.scrollTo({ top: Math.max(0, topo), behavior: 'smooth' });
+        }, 30);
+    }
+}
+
+function alternarMapa() {
+    ajustarMapa(!estado.mapa.expandido, true);
+    vibrar(12);
+}
+
+// Um toquinho de vibracao confirma o gesto no celular
+function vibrar(ms) {
+    if (navigator.vibrate) {
+        try {
+            navigator.vibrate(ms);
+        } catch (erro) {
+            // alguns navegadores recusam sem interacao; nao faz mal
+        }
+    }
+}
+
+// Apaga os botoes de mais e menos quando o zoom chega no limite
+function atualizarBotoesZoom() {
+    const mais = document.getElementById('botao-aproximar');
+    const menos = document.getElementById('botao-afastar');
+    if (mais) {
+        mais.disabled = estado.mapa.zoom >= ZOOM_MAX - 0.001;
+    }
+    if (menos) {
+        menos.disabled = estado.mapa.zoom <= ZOOM_MIN + 0.001;
+    }
+}
+
+// Mostra por um instante de quanto e a aproximacao
+let relogioSelo = null;
+function mostrarSeloZoom() {
+    const selo = document.getElementById('selo-zoom');
+    if (!selo) {
+        return;
+    }
+    selo.textContent = estado.mapa.zoom.toFixed(1).replace('.', ',') + '×';
+    selo.classList.add('selo-zoom--visivel');
+    window.clearTimeout(relogioSelo);
+    relogioSelo = window.setTimeout(function () {
+        selo.classList.remove('selo-zoom--visivel');
+    }, 900);
+}
+
+function distanciaEntre(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
 function ligarGestosDoMapa() {
     const svg = document.querySelector('.mapa__svg');
-    let arrastando = null;
+    const mapa = document.querySelector('.mapa');
+    const puxador = document.getElementById('puxador-mapa');
+
+    const dedos = new Map();   // cada dedo encostado na tela
+    let arrasto = null;        // arrastar o mapa com um dedo
+    let pinca = null;          // aproximar com dois dedos
+    let puxada = null;         // puxar para baixo para ampliar
+    let ultimoToque = 0;
+    let ultimoPonto = null;
+
+    function porPixel() {
+        const caixa = svg.getBoundingClientRect();
+        return caixa.width < 1 ? 0 : (VISTA.w / estado.mapa.zoom) / caixa.width;
+    }
+
+    function encerrarPuxada(cancelado) {
+        if (!puxada) {
+            return;
+        }
+        const alcance = alturaMaximaDoMapa() - MAPA_RECOLHIDO;
+        const andado = puxada.altura - MAPA_RECOLHIDO;
+        const rapido = Math.abs(puxada.ultimoAvanco) > 6;
+        let expandir;
+
+        if (cancelado) {
+            expandir = puxada.comecouExpandido;
+        } else if (rapido) {
+            expandir = puxada.ultimoAvanco > 0;
+        } else {
+            expandir = andado > alcance * 0.35;
+        }
+
+        ajustarMapa(expandir, true);
+        if (expandir !== puxada.comecouExpandido) {
+            vibrar(12);
+        }
+        puxada = null;
+    }
+
+    // ---- um ou dois dedos sobre o mapa ----
 
     svg.addEventListener('pointerdown', function (evento) {
-        arrastando = { x: evento.clientX, y: evento.clientY };
+        dedos.set(evento.pointerId, { x: evento.clientX, y: evento.clientY });
+        try {
+            svg.setPointerCapture(evento.pointerId);
+        } catch (erro) {
+            // navegadores antigos apenas ignoram
+        }
+
+        if (dedos.size === 2) {
+            // o segundo dedo cancela o arrasto e comeca a pinca
+            arrasto = null;
+            if (puxada) {
+                ajustarMapa(puxada.comecouExpandido, true);
+                puxada = null;
+            }
+            const par = Array.from(dedos.values());
+            pinca = {
+                dist: Math.max(1, distanciaEntre(par[0], par[1])),
+                meio: { x: (par[0].x + par[1].x) / 2, y: (par[0].y + par[1].y) / 2 }
+            };
+            return;
+        }
+
+        if (dedos.size === 1) {
+            arrasto = {
+                x: evento.clientX,
+                y: evento.clientY,
+                x0: evento.clientX,
+                y0: evento.clientY,
+                decidido: false,
+                mexeu: false
+            };
+        }
     });
 
     svg.addEventListener('pointermove', function (evento) {
-        if (!arrastando) {
+        if (!dedos.has(evento.pointerId)) {
             return;
         }
-        const caixa = svg.getBoundingClientRect();
-        const porPixel = (VISTA.w / estado.mapa.zoom) / caixa.width;
-        estado.mapa.cx -= (evento.clientX - arrastando.x) * porPixel;
-        estado.mapa.cy -= (evento.clientY - arrastando.y) * porPixel;
-        arrastando = { x: evento.clientX, y: evento.clientY };
+        dedos.set(evento.pointerId, { x: evento.clientX, y: evento.clientY });
+
+        // ---- dois dedos: aproximar e afastar ----
+        if (pinca && dedos.size >= 2) {
+            const par = Array.from(dedos.values());
+            const dist = Math.max(1, distanciaEntre(par[0], par[1]));
+            const meio = { x: (par[0].x + par[1].x) / 2, y: (par[0].y + par[1].y) / 2 };
+            const passo = porPixel();
+
+            // primeiro o mapa acompanha o ponto entre os dois dedos
+            estado.mapa.cx -= (meio.x - pinca.meio.x) * passo;
+            estado.mapa.cy -= (meio.y - pinca.meio.y) * passo;
+
+            // depois aproxima mantendo esse ponto parado
+            const alvo = pontoNoMapa(svg, meio.x, meio.y);
+            pinca.meio = meio;
+            const razao = dist / pinca.dist;
+            pinca.dist = dist;
+            zoomPara(estado.mapa.zoom * razao, alvo.x, alvo.y);
+            mostrarSeloZoom();
+            return;
+        }
+
+        // ---- puxando para baixo para ampliar o mapa ----
+        if (puxada) {
+            const alto = Math.max(MAPA_RECOLHIDO,
+                Math.min(alturaMaximaDoMapa(), puxada.base + (evento.clientY - puxada.y0)));
+            puxada.ultimoAvanco = alto - puxada.altura;
+            puxada.altura = alto;
+            definirAlturaDoMapa(alto);
+            aplicarVista();
+            return;
+        }
+
+        // ---- um dedo ----
+        if (!arrasto) {
+            return;
+        }
+
+        const dx = evento.clientX - arrasto.x0;
+        const dy = evento.clientY - arrasto.y0;
+
+        // O primeiro movimento decide o gesto: puxar o mapa para baixo ou
+        // arrastar o desenho. Depois de decidido ele nao muda mais no meio.
+        if (!arrasto.decidido) {
+            if (Math.hypot(dx, dy) < 8) {
+                return;
+            }
+            arrasto.decidido = true;
+            arrasto.mexeu = true;
+
+            const verticalParaBaixo = dy > 0 && Math.abs(dy) > Math.abs(dx) * 1.5;
+            if (noCelular() && !estado.mapa.expandido && verticalParaBaixo) {
+                puxada = {
+                    y0: evento.clientY,
+                    base: mapa.getBoundingClientRect().height,
+                    altura: mapa.getBoundingClientRect().height,
+                    ultimoAvanco: 0,
+                    comecouExpandido: false
+                };
+                mapa.classList.remove('mapa--animando');
+                arrasto = null;
+                return;
+            }
+        }
+
+        const passo = porPixel();
+        estado.mapa.cx -= (evento.clientX - arrasto.x) * passo;
+        estado.mapa.cy -= (evento.clientY - arrasto.y) * passo;
+        arrasto.x = evento.clientX;
+        arrasto.y = evento.clientY;
         aplicarVista();
     });
 
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (nome) {
-        svg.addEventListener(nome, function () {
-            arrastando = null;
-        });
+    function soltar(evento) {
+        dedos.delete(evento.pointerId);
+        try {
+            svg.releasePointerCapture(evento.pointerId);
+        } catch (erro) {
+            // ja pode ter sido solto
+        }
+
+        if (dedos.size < 2) {
+            pinca = null;
+        }
+        if (dedos.size === 0) {
+            encerrarPuxada(evento.type === 'pointercancel');
+
+            // Dois toques rapidos no mesmo lugar aproximam o mapa
+            if (arrasto && !arrasto.mexeu) {
+                const agora = Date.now();
+                const ponto = { x: evento.clientX, y: evento.clientY };
+                if (agora - ultimoToque < 320 && ultimoPonto &&
+                    distanciaEntre(ponto, ultimoPonto) < 34) {
+                    const alvo = pontoNoMapa(svg, ponto.x, ponto.y);
+                    zoomPara(estado.mapa.zoom * 1.8, alvo.x, alvo.y);
+                    mostrarSeloZoom();
+                    vibrar(10);
+                    ultimoToque = 0;
+                } else {
+                    ultimoToque = agora;
+                    ultimoPonto = ponto;
+                }
+            }
+            arrasto = null;
+        }
+    }
+
+    ['pointerup', 'pointercancel'].forEach(function (nome) {
+        svg.addEventListener(nome, soltar);
     });
 
+    // ---- rodinha do mouse, no computador ----
     svg.addEventListener('wheel', function (evento) {
         evento.preventDefault();
         const alvo = pontoNoMapa(svg, evento.clientX, evento.clientY);
         zoomPara(estado.mapa.zoom * (evento.deltaY < 0 ? 1.14 : 0.88), alvo.x, alvo.y);
+        mostrarSeloZoom();
     }, { passive: false });
 
+    // ---- botoes ----
     document.getElementById('botao-aproximar').addEventListener('click', function () {
         zoomPara(estado.mapa.zoom * 1.4);
+        mostrarSeloZoom();
     });
     document.getElementById('botao-afastar').addEventListener('click', function () {
         zoomPara(estado.mapa.zoom / 1.4);
+        mostrarSeloZoom();
     });
+
+    // ---- teclado, com o mapa em foco ----
+    svg.setAttribute('tabindex', '0');
+    svg.addEventListener('keydown', function (evento) {
+        const passo = 40 / estado.mapa.zoom;
+        const teclas = {
+            ArrowUp: [0, -passo], ArrowDown: [0, passo],
+            ArrowLeft: [-passo, 0], ArrowRight: [passo, 0]
+        };
+        if (teclas[evento.key]) {
+            evento.preventDefault();
+            estado.mapa.cx += teclas[evento.key][0];
+            estado.mapa.cy += teclas[evento.key][1];
+            aplicarVista();
+        } else if (evento.key === '+' || evento.key === '=') {
+            evento.preventDefault();
+            zoomPara(estado.mapa.zoom * 1.4);
+            mostrarSeloZoom();
+        } else if (evento.key === '-' || evento.key === '_') {
+            evento.preventDefault();
+            zoomPara(estado.mapa.zoom / 1.4);
+            mostrarSeloZoom();
+        }
+    });
+
+    // ---- a alca que amplia o mapa ----
+    if (puxador) {
+        let alcaAtiva = null;
+
+        puxador.addEventListener('pointerdown', function (evento) {
+            evento.preventDefault();
+            try {
+                puxador.setPointerCapture(evento.pointerId);
+            } catch (erro) {
+                // sem captura o gesto ainda funciona dentro da alca
+            }
+            const altura = mapa.getBoundingClientRect().height;
+            alcaAtiva = { id: evento.pointerId, y0: evento.clientY, mexeu: false };
+            puxada = {
+                y0: evento.clientY,
+                base: altura,
+                altura: altura,
+                ultimoAvanco: 0,
+                comecouExpandido: estado.mapa.expandido
+            };
+            mapa.classList.remove('mapa--animando');
+        });
+
+        puxador.addEventListener('pointermove', function (evento) {
+            if (!alcaAtiva || alcaAtiva.id !== evento.pointerId || !puxada) {
+                return;
+            }
+            if (Math.abs(evento.clientY - alcaAtiva.y0) > 5) {
+                alcaAtiva.mexeu = true;
+            }
+            const alto = Math.max(MAPA_RECOLHIDO,
+                Math.min(alturaMaximaDoMapa(), puxada.base + (evento.clientY - puxada.y0)));
+            puxada.ultimoAvanco = alto - puxada.altura;
+            puxada.altura = alto;
+            definirAlturaDoMapa(alto);
+            aplicarVista();
+        });
+
+        ['pointerup', 'pointercancel'].forEach(function (nome) {
+            puxador.addEventListener(nome, function (evento) {
+                if (!alcaAtiva || alcaAtiva.id !== evento.pointerId) {
+                    return;
+                }
+                // Um toque simples na alca tambem alterna, sem precisar arrastar
+                if (!alcaAtiva.mexeu) {
+                    puxada = null;
+                    alternarMapa();
+                } else {
+                    encerrarPuxada(nome === 'pointercancel');
+                }
+                alcaAtiva = null;
+            });
+        });
+
+        puxador.addEventListener('keydown', function (evento) {
+            if (evento.key === 'Enter' || evento.key === ' ') {
+                evento.preventDefault();
+                alternarMapa();
+            }
+        });
+    }
+
+    // Girar o aparelho ou mudar a janela muda o formato da caixa do mapa
+    window.addEventListener('resize', function () {
+        if (estado.mapa.expandido && noCelular()) {
+            definirAlturaDoMapa(alturaMaximaDoMapa());
+        } else if (!noCelular()) {
+            const alvo = document.querySelector('.mapa');
+            if (alvo) {
+                alvo.style.removeProperty('--altura-mapa');
+            }
+        }
+        aplicarVista();
+    });
+
+    ajustarMapa(false, false);
 }
 
 function desenharFrota() {
@@ -1508,6 +1915,12 @@ function irPara(tela) {
     });
 
     window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Fora da tela do mapa a caixa do desenho fica com tamanho zero; ao voltar,
+    // a janela precisa ser refeita com as medidas de verdade.
+    if (tela === 'mapa') {
+        aplicarVista();
+    }
 }
 
 function trocarRegiao(id) {

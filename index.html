@@ -180,12 +180,19 @@
                     <button class="botao-flutuante botao-zoom" id="botao-afastar" aria-label="Afastar">&#8722;</button>
                 </div>
 
+                <span class="selo-zoom" id="selo-zoom" aria-hidden="true">1,6&#215;</span>
+
                 <div class="legenda">
                     <span class="legenda__item"><i class="traco traco--percorrido"></i>Já passou</span>
                     <span class="legenda__item"><i class="traco traco--previsto"></i>Rota prevista</span>
                     <span class="legenda__item"><i class="traco traco--pendente"></i>Ainda não passou</span>
                     <span class="legenda__item"><i class="ponto-voce"></i>Você</span>
                 </div>
+
+                <button class="mapa__puxador" id="puxador-mapa" aria-expanded="false" aria-label="Ampliar o mapa">
+                    <span class="mapa__puxador-alca"></span>
+                    <span class="mapa__puxador-texto">Arraste para ampliar</span>
+                </button>
             </div>
 
             <div id="cartao-caminhao"></div>
