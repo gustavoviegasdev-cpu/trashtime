@@ -13,9 +13,10 @@ const ESCALA = 4;
 const ALCANCE_PREVISTO = 90;
 
 // O mapa desenha uma área maior do que cabe na tela; o zoom recorta um pedaço
-const MUNDO = { w: 780, h: 620 };
+// O desenho vai de (0, -320) ate (900, 780): a peninsula inteira, com cidade
+// ao norte e a leste do centro, a baia a oeste e o Guama ao sul.
+const MUNDO = { x: 0, y: -320, w: 900, h: 1100 };
 const VISTA = { w: 390, h: 260 };
-const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 const ZOOM_PADRAO = 1.6;
 
@@ -557,10 +558,26 @@ function formatoDaVista(svg) {
     return caixa.height / caixa.width;
 }
 
+// O quanto da pode afastar depende do formato da caixa: a janela nunca pode
+// ficar maior que o desenho, senao sobraria vazio nas bordas.
+function zoomMinimo() {
+    const svg = document.querySelector('.mapa__svg');
+    if (!svg) {
+        return VISTA.w / MUNDO.w;
+    }
+    const formato = formatoDaVista(svg);
+    return Math.max(VISTA.w / MUNDO.w, (VISTA.w * formato) / MUNDO.h);
+}
+
 function aplicarVista() {
     const svg = document.querySelector('.mapa__svg');
     if (!svg) {
         return;
+    }
+
+    const minimo = zoomMinimo();
+    if (estado.mapa.zoom < minimo) {
+        estado.mapa.zoom = minimo;
     }
 
     const zoom = estado.mapa.zoom;
@@ -569,11 +586,13 @@ function aplicarVista() {
 
     // A vista não escapa dos limites do mundo desenhado
     estado.mapa.cx = largura >= MUNDO.w
-        ? MUNDO.w / 2
-        : Math.max(largura / 2, Math.min(MUNDO.w - largura / 2, estado.mapa.cx));
+        ? MUNDO.x + MUNDO.w / 2
+        : Math.max(MUNDO.x + largura / 2,
+                   Math.min(MUNDO.x + MUNDO.w - largura / 2, estado.mapa.cx));
     estado.mapa.cy = altura >= MUNDO.h
-        ? MUNDO.h / 2
-        : Math.max(altura / 2, Math.min(MUNDO.h - altura / 2, estado.mapa.cy));
+        ? MUNDO.y + MUNDO.h / 2
+        : Math.max(MUNDO.y + altura / 2,
+                   Math.min(MUNDO.y + MUNDO.h - altura / 2, estado.mapa.cy));
 
     svg.setAttribute('viewBox',
         (estado.mapa.cx - largura / 2).toFixed(1) + ' ' +
@@ -587,7 +606,7 @@ function aplicarVista() {
 }
 
 function zoomPara(novo, focoX, focoY) {
-    const limitado = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, novo));
+    const limitado = Math.max(zoomMinimo(), Math.min(ZOOM_MAX, novo));
     if (focoX !== undefined) {
         // mantém o ponto sob o cursor parado enquanto aproxima
         const razao = 1 - estado.mapa.zoom / limitado;
@@ -707,7 +726,7 @@ function atualizarBotoesZoom() {
         mais.disabled = estado.mapa.zoom >= ZOOM_MAX - 0.001;
     }
     if (menos) {
-        menos.disabled = estado.mapa.zoom <= ZOOM_MIN + 0.001;
+        menos.disabled = estado.mapa.zoom <= zoomMinimo() + 0.001;
     }
 }
 
