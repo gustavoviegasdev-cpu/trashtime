@@ -3,7 +3,7 @@
    imagens. Assim uma versão nova chega sozinha a quem já visitou, e o app
    continua abrindo sem internet. */
 
-const CACHE = 'trashtime-v3';
+const CACHE = 'trashtime-v4';
 
 const ARQUIVOS = [
     './',

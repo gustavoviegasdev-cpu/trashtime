@@ -100,56 +100,122 @@ const CAMINHOES = [
     {
         id: 'ct052', nome: 'Caminhão CT-052', setor: 'Setor Umarizal',
         cor: '#2FA85A', velocidade: 1.4, progresso: 0.3, voltas: 0,
-        rota: [{ x: 156.9, y: 57.2 }, { x: 280.6, y: 48.6 }, { x: 277.4, y: 2.7 }, { x: 215.5, y: 7.0 }],
-        ruas: ['Av. Sen. Lemos', 'Trav. Rui Barbosa', 'Av. Visc. de Souza Franco']
+        rota: [
+            { x: 156.9, y: 57.2 }, { x: 342.5, y: 44.3 }, { x: 339.2, y: -1.6 },
+            { x: 277.4, y: 2.7 }, { x: 274.2, y: -43.2 }, { x: 150.5, y: -34.5 },
+            { x: 156.9, y: 57.2 }
+        ],
+        ruas: ['Av. Sen. Lemos',
+               'Trav. Rui Barbosa',
+               'Av. Visc. de Souza Franco',
+               'Trav. Dom Romualdo de Seixas',
+               'Av. Brás de Aguiar',
+               'Trav. Antônio Barreto']
     },
     {
         id: 'ct063', nome: 'Caminhão CT-063', setor: 'Setor Reduto',
         cor: '#2FA85A', velocidade: 1.2, progresso: 0.55, voltas: 0,
-        rota: [{ x: 163.3, y: 149.0 }, { x: 287.0, y: 140.4 }, { x: 283.8, y: 94.5 }, { x: 222.0, y: 98.8 }],
-        ruas: ['Av. Assis de Vasconcelos', 'Trav. Quintino Bocaiúva', 'Blvd. Castilhos França']
+        rota: [
+            { x: 163.3, y: 149.0 }, { x: 348.9, y: 136.0 }, { x: 345.7, y: 90.2 },
+            { x: 160.1, y: 103.1 }, { x: 163.3, y: 149.0 }
+        ],
+        ruas: ['Av. Assis de Vasconcelos',
+               'Trav. Quintino Bocaiúva',
+               'Blvd. Castilhos França',
+               'Trav. Campos Sales']
     },
     {
         id: 'ct104', nome: 'Caminhão CT-104', setor: 'Setor Campina',
         cor: '#2FA85A', velocidade: 1.6, progresso: 0.46, voltas: 0,
-        rota: [{ x: 169.7, y: 240.8 }, { x: 293.4, y: 232.1 }, { x: 290.2, y: 186.3 }, { x: 228.4, y: 190.6 }],
-        ruas: ['Blvd. Castilhos França', 'Rua Santo Antônio', 'Trav. Campos Sales']
+        rota: [
+            { x: 169.7, y: 240.8 }, { x: 355.3, y: 227.8 }, { x: 352.1, y: 181.9 },
+            { x: 166.5, y: 194.9 }, { x: 169.7, y: 240.8 }
+        ],
+        ruas: ['Blvd. Castilhos França',
+               'Av. Pres. Vargas',
+               'Rua Santo Antônio',
+               'Trav. Campos Sales']
     },
     {
         id: 'ct118', nome: 'Caminhão CT-118', setor: 'Setor Cidade Velha',
         cor: '#2FA85A', velocidade: 1.1, progresso: 0.3, voltas: 0,
-        rota: [{ x: 173.0, y: 286.7 }, { x: 176.2, y: 332.6 }, { x: 238.0, y: 328.2 }],
-        ruas: ['Rua Padre Champagnat', 'Rua Siqueira Mendes']
+        rota: [
+            { x: 173.0, y: 286.7 }, { x: 296.6, y: 278.0 }, { x: 299.9, y: 323.9 },
+            { x: 238.0, y: 328.2 }, { x: 241.2, y: 374.1 }, { x: 179.4, y: 378.5 },
+            { x: 173.0, y: 286.7 }
+        ],
+        ruas: ['Rua Padre Champagnat',
+               'Rua Dr. Malcher',
+               'Rua Siqueira Mendes',
+               'Trav. Joaquim Távora',
+               'Rua Gaspar Viana',
+               'Blvd. Castilhos França']
     },
     {
         id: 'ct090', nome: 'Caminhão CT-090', setor: 'Setor Nazaré',
         cor: '#2FA85A', velocidade: 1.3, progresso: 0.22, voltas: 0,
-        rota: [{ x: 345.7, y: 90.2 }, { x: 469.4, y: 81.5 }, { x: 466.2, y: 35.6 }, { x: 404.3, y: 39.9 }],
-        ruas: ['Av. Nazaré', 'Trav. 14 de Março', 'Av. Gentil Bittencourt']
+        rota: [
+            { x: 345.7, y: 90.2 }, { x: 531.2, y: 77.2 }, { x: 528.0, y: 31.3 },
+            { x: 342.5, y: 44.3 }, { x: 345.7, y: 90.2 }
+        ],
+        ruas: ['Av. Nazaré',
+               'Trav. 14 de Março',
+               'Av. Gentil Bittencourt',
+               'Av. Gov. José Malcher']
     },
     {
         id: 'ct071', nome: 'Caminhão CT-071', setor: 'Setor São Brás',
         cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
-        rota: [{ x: 534.4, y: 123.1 }, { x: 658.1, y: 114.4 }, { x: 651.7, y: 22.6 }, { x: 589.8, y: 27.0 }],
-        ruas: ['Av. Almirante Barroso', 'Trav. Mauriti', 'Av. José Bonifácio']
+        rota: [
+            { x: 534.4, y: 123.1 }, { x: 720.0, y: 110.1 }, { x: 716.8, y: 64.2 },
+            { x: 654.9, y: 68.5 }, { x: 651.7, y: 22.6 }, { x: 528.0, y: 31.3 },
+            { x: 534.4, y: 123.1 }
+        ],
+        ruas: ['Av. Almirante Barroso',
+               'Trav. Mauriti',
+               'Av. José Bonifácio',
+               'Trav. Vileta',
+               'Rua Curuçá',
+               'Av. Dr. Freitas']
     },
     {
         id: 'ct076', nome: 'Caminhão CT-076', setor: 'Setor Batista Campos',
         cor: '#2FA85A', velocidade: 1.5, progresso: 0.38, voltas: 0,
-        rota: [{ x: 355.3, y: 227.8 }, { x: 479.0, y: 219.2 }, { x: 475.8, y: 173.3 }, { x: 413.9, y: 177.6 }],
-        ruas: ['Rua dos Mundurucus', 'Trav. Padre Eutíquio', 'Av. Gov. José Malcher']
+        rota: [
+            { x: 355.3, y: 227.8 }, { x: 540.8, y: 214.8 }, { x: 537.6, y: 169.0 },
+            { x: 352.1, y: 181.9 }, { x: 355.3, y: 227.8 }
+        ],
+        ruas: ['Rua dos Mundurucus',
+               'Trav. Padre Eutíquio',
+               'Av. Gov. José Malcher',
+               'Rua dos Tamoios']
     },
     {
         id: 'ct085', nome: 'Caminhão CT-085', setor: 'Setor Jurunas',
         cor: '#2FA85A', velocidade: 1.25, progresso: 0.62, voltas: 0,
-        rota: [{ x: 306.3, y: 415.7 }, { x: 430.0, y: 407.0 }, { x: 426.8, y: 361.2 }, { x: 364.9, y: 365.5 }],
-        ruas: ['Rua Nova', 'Trav. Roberto Camelier', 'Av. Bernardo Sayão']
+        rota: [
+            { x: 306.3, y: 415.7 }, { x: 491.8, y: 402.7 }, { x: 488.6, y: 356.8 },
+            { x: 303.1, y: 369.8 }, { x: 306.3, y: 415.7 }
+        ],
+        ruas: ['Rua Nova',
+               'Trav. Roberto Camelier',
+               'Av. Bernardo Sayão',
+               'Rua Veiga Cabral']
     },
     {
         id: 'ct099', nome: 'Caminhão CT-099', setor: 'Setor Guamá',
         cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
-        rota: [{ x: 495.0, y: 448.6 }, { x: 618.7, y: 440.0 }, { x: 615.5, y: 394.1 }, { x: 553.7, y: 398.4 }],
-        ruas: ['Av. Perimetral', 'Trav. Barão do Triunfo', 'Rua Augusto Corrêa']
+        rota: [
+            { x: 495.0, y: 448.6 }, { x: 680.6, y: 435.6 }, { x: 677.4, y: 389.7 },
+            { x: 615.5, y: 394.1 }, { x: 612.3, y: 348.2 }, { x: 488.6, y: 356.8 },
+            { x: 495.0, y: 448.6 }
+        ],
+        ruas: ['Av. Perimetral',
+               'Trav. Barão do Triunfo',
+               'Rua Augusto Corrêa',
+               'Trav. Vileta',
+               'Rua Silva Castro',
+               'Av. Bernardo Sayão']
     }
 ];
 
@@ -166,6 +232,25 @@ const FILTROS = [
     { id: 'horario', nome: 'Horário' },
     { id: 'aviso', nome: 'Avisos' }
 ];
+
+// Lugares que qualquer belenense reconhece. Servem para o morador se situar
+// no mapa sem precisar ler nome de rua.
+const PONTOS_BELEM = [
+    { nome: 'Ver-o-Peso', x: 168, y: 232, tipo: 'mercado' },
+    { nome: 'Estação das Docas', x: 160, y: 158, tipo: 'cultura' },
+    { nome: 'Teatro da Paz', x: 268, y: 172, tipo: 'cultura' },
+    { nome: 'Forte do Presépio', x: 192, y: 330, tipo: 'forte' },
+    { nome: 'Mangal das Garças', x: 214, y: 402, tipo: 'parque' },
+    { nome: 'Basílica de Nazaré', x: 408, y: 82, tipo: 'igreja' },
+    { nome: 'Pça. Batista Campos', x: 432, y: 214, tipo: 'parque' },
+    { nome: 'Mercado de São Brás', x: 645, y: 62, tipo: 'mercado' },
+    { nome: 'Bosque Rodrigues Alves', x: 692, y: -34, tipo: 'parque' },
+    { nome: 'UFPA', x: 604, y: 452, tipo: 'ensino' },
+    { nome: 'Ilha do Combu', x: 348, y: 588, tipo: 'ilha' }
+];
+
+// A partir daqui os nomes dos pontos cabem na tela sem virar sopa de letras
+const ZOOM_MOSTRA_NOMES = 1.15;
 
 const INTERRUPTORES = [
     { id: 'proximidade', titulo: 'Caminhão se aproximando', texto: 'Alerta quando o caminhão entra na sua rua' },
@@ -210,7 +295,8 @@ let estado = {
         prefeitura: true,
         resumo: false,
         distancia: 500,
-        hora: '20:00'
+        hora: '20:00',
+        tema: null            // null = segue o aparelho; 'claro' ou 'escuro' = escolha do morador
     }
 };
 
@@ -431,32 +517,135 @@ let frotaMontada = false;
 
 // A camada do mapa é criada UMA vez; depois só os atributos mudam.
 // Recriar tudo a cada segundo destruía o foco do teclado e desperdiçava trabalho.
+// ===== O caminhao de coleta em tres dimensoes =====
+// Nao e um icone chapado: e um volume desenhado em tres faces. A projecao
+// abaixo transforma um ponto do espaco (comprimento, altura, profundidade)
+// nas duas coordenadas do desenho - o mesmo truque de um mapa isometrico.
+const FUGA_X = 0.42;
+const FUGA_Y = 0.34;
+const TAMANHO_CAMINHAO = 1.18;
+
+function proj(x, y, z) {
+    return ((x + FUGA_X * z) * TAMANHO_CAMINHAO).toFixed(1) + ',' +
+           ((y - FUGA_Y * z) * TAMANHO_CAMINHAO).toFixed(1);
+}
+
+function esc(v) {
+    return (v * TAMANHO_CAMINHAO).toFixed(1);
+}
+
+function face(pontos) {
+    return pontos.map(function (p) { return proj(p[0], p[1], p[2]); }).join(' ');
+}
+
+// Clareia ou escurece uma cor: cada face pega a luz de um jeito
+function tom(cor, quanto) {
+    const n = parseInt(cor.slice(1), 16);
+    const canal = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(function (c) {
+        const v = quanto >= 0 ? c + (255 - c) * quanto : c * (1 + quanto);
+        return Math.max(0, Math.min(255, Math.round(v)));
+    });
+    return '#' + canal.map(function (c) { return ('0' + c.toString(16)).slice(-2); }).join('');
+}
+
+function desenhoDoCaminhao(cor) {
+    const LADO = cor;                 // face virada para quem olha
+    const TOPO = tom(cor, 0.34);      // pega a luz de cima
+    const FUNDO = tom(cor, -0.22);    // a que foge para o fundo
+    const ESCURO = tom(cor, -0.42);
+
+    const P = 10;    // profundidade
+    const A = -15;   // altura da cacamba
+    const AC = -10;  // altura da cabine
+
+    return (
+        '<polygon fill="' + LADO + '" points="' + face([[-14,0,0],[6,0,0],[6,A,0],[-14,A,0]]) + '" />' +
+        '<polygon fill="' + TOPO + '" points="' + face([[-14,A,0],[6,A,0],[6,A,P],[-14,A,P]]) + '" />' +
+        '<polygon fill="' + FUNDO + '" points="' + face([[-14,0,0],[-14,A,0],[-14,A,P],[-14,0,P]]) + '" />' +
+        '<polygon fill="' + ESCURO + '" opacity="0.35" points="' +
+            face([[-14,-3,1],[-14,-12,1],[-14,-12,9],[-14,-3,9]]) + '" />' +
+        '<polygon fill="' + LADO + '" points="' + face([[6,0,0],[14,0,0],[14,AC,0],[6,AC,0]]) + '" />' +
+        '<polygon fill="' + TOPO + '" points="' + face([[6,AC,0],[14,AC,0],[14,AC,P],[6,AC,P]]) + '" />' +
+        '<polygon fill="' + FUNDO + '" points="' + face([[14,0,0],[14,AC,0],[14,AC,P],[14,0,P]]) + '" />' +
+        '<polygon fill="#DCEAF5" points="' + face([[7.4,-3,-0.4],[12.6,-3,-0.4],[12.6,-8.6,-0.4],[7.4,-8.6,-0.4]]) + '" />' +
+        '<polygon fill="#EAF3FA" points="' + face([[14.3,-3,1],[14.3,-8.6,1],[14.3,-8.6,9],[14.3,-3,9]]) + '" />' +
+        '<polygon fill="#FFFFFF" opacity="0.8" points="' + face([[-12.5,-4.2,-0.35],[4.5,-4.2,-0.35],[4.5,-7,-0.35],[-12.5,-7,-0.35]]) + '" />' +
+        '<g class="caminhao__roda"><circle fill="#26302A" cx="' + esc(-8) + '" cy="' + esc(0.5) + '" r="' + esc(3.9) + '" />' +
+            '<circle fill="' + tom(cor, 0.55) + '" cx="' + esc(-8) + '" cy="' + esc(0.5) + '" r="' + esc(1.5) + '" /></g>' +
+        '<g class="caminhao__roda"><circle fill="#26302A" cx="' + esc(9) + '" cy="' + esc(0.5) + '" r="' + esc(3.9) + '" />' +
+            '<circle fill="' + tom(cor, 0.55) + '" cx="' + esc(9) + '" cy="' + esc(0.5) + '" r="' + esc(1.5) + '" /></g>' +
+        '<circle class="caminhao__giroflex" fill="#F5C542" cx="' + esc(10 + FUGA_X * 5) +
+            '" cy="' + esc(AC - 1.4 - FUGA_Y * 5) + '" r="' + esc(1.8) + '" />'
+    );
+}
+
+let pontosMontados = false;
+
+function montarPontos() {
+    const camada = document.getElementById('camada-pontos');
+    if (!camada) {
+        return;
+    }
+    camada.innerHTML = PONTOS_BELEM.map(function (p, n) {
+        // A largura da tarja é estimada pelo número de letras: o SVG não mede
+        // texto antes de desenhar, e medir depois faria o mapa piscar.
+        const largura = p.nome.length * 5.1 + 16;
+        return '<g class="marco" id="marco-' + n + '">' +
+            '<g class="marco__nome">' +
+                '<rect class="marco__tarja" x="9" y="-8" width="' + largura.toFixed(1) + '" height="16" rx="8" />' +
+                '<text class="marco__texto" x="16" y="3.6">' + p.nome + '</text>' +
+            '</g>' +
+            '<circle class="marco__ponto" r="4.2" />' +
+            '<circle class="marco__miolo" r="1.7" />' +
+        '</g>';
+    }).join('');
+    pontosMontados = true;
+}
+
+function atualizarPontos() {
+    if (!pontosMontados) {
+        montarPontos();
+    }
+    const escala = 1 / estado.mapa.zoom;
+    const mostrarNomes = estado.mapa.zoom >= ZOOM_MOSTRA_NOMES;
+
+    PONTOS_BELEM.forEach(function (p, n) {
+        const grupo = document.getElementById('marco-' + n);
+        if (!grupo) {
+            return;
+        }
+        grupo.setAttribute('transform',
+            'translate(' + p.x + ',' + p.y + ') scale(' + escala.toFixed(3) + ')');
+        grupo.classList.toggle('marco--com-nome', mostrarNomes);
+    });
+}
+
 function montarFrota() {
     const camada = document.getElementById('camada-frota');
     let svg = '';
 
     // Cada rota tem três pedaços, um por estado da legenda
     CAMINHOES.forEach(function (caminhao) {
-        svg += '<path id="rota-passou-' + caminhao.id + '" d="" stroke="#2FA85A" stroke-width="5" ' +
+        svg += '<path class="rota rota--passou" id="rota-passou-' + caminhao.id + '" d="" stroke-width="5" ' +
             'fill="none" stroke-linecap="round" stroke-linejoin="round" />';
-        svg += '<path id="rota-prevista-' + caminhao.id + '" d="" stroke="#4CC97A" stroke-width="5" ' +
+        svg += '<path class="rota rota--prevista" id="rota-prevista-' + caminhao.id + '" d="" stroke-width="5" ' +
             'fill="none" stroke-dasharray="9 9" stroke-linecap="round" stroke-linejoin="round" />';
-        svg += '<path id="rota-pendente-' + caminhao.id + '" d="" stroke="#B9C4BC" stroke-width="4.5" ' +
+        svg += '<path class="rota rota--pendente" id="rota-pendente-' + caminhao.id + '" d="" stroke-width="4.5" ' +
             'fill="none" stroke-dasharray="2 9" stroke-linecap="round" stroke-linejoin="round" />';
     });
 
     // Localização do morador (acompanha o bairro escolhido)
     svg += '<g id="grupo-usuario">' +
-        '<circle r="16" fill="#1F7AEC" opacity="0.16" />' +
-        '<circle r="7" fill="#1F7AEC" stroke="#FFFFFF" stroke-width="3" />' +
+        '<circle class="usuario__halo" id="halo-usuario" r="16" />' +
+        '<circle class="usuario__ponto" r="7" stroke-width="3" />' +
     '</g>';
 
     CAMINHOES.forEach(function (caminhao) {
         svg += '<g class="caminhao-marcador" id="marcador-' + caminhao.id + '" tabindex="0" role="button">' +
-            '<circle id="halo-' + caminhao.id + '" r="24" fill="' + caminhao.cor + '" opacity="0.14" />' +
-            '<circle r="17" fill="' + caminhao.cor + '" stroke="#FFFFFF" stroke-width="3" />' +
-            '<use href="#ic-caminhao" x="-9" y="-9" width="18" height="18" fill="none" ' +
-            'stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />' +
+            '<circle id="halo-' + caminhao.id + '" class="caminhao__halo" r="24" fill="' + caminhao.cor + '" opacity="0.14" />' +
+            '<ellipse class="caminhao__chao" cx="1" cy="6.4" rx="18" ry="4.4" />' +
+            '<g class="caminhao__corpo">' + desenhoDoCaminhao(caminhao.cor) + '</g>' +
+            '<circle class="caminhao__toque" r="21" fill="transparent" />' +
         '</g>';
     });
 
@@ -529,8 +718,14 @@ function atualizarFrota() {
         marcador.setAttribute('aria-label', caminhao.nome + ', ' + textoSituacao(caminhao));
 
         const halo = document.getElementById('halo-' + caminhao.id);
-        halo.setAttribute('r', selecionado ? 27 : 24);
-        halo.setAttribute('opacity', selecionado ? 0.32 : 0.14);
+        halo.setAttribute('r', selecionado ? 30 : 26);
+        halo.setAttribute('opacity', selecionado ? 0.30 : 0.13);
+
+        // O caminhao parado nao balanca nem gira as rodas: a animacao conta o
+        // estado dele, em vez de ser enfeite.
+        marcador.classList.toggle('caminhao-marcador--andando', caminhao.velocidade > 0);
+        marcador.classList.toggle('caminhao-marcador--parado', caminhao.velocidade === 0);
+        marcador.classList.toggle('caminhao-marcador--ativo', selecionado);
     });
 }
 
@@ -602,6 +797,7 @@ function aplicarVista() {
     if (frotaMontada) {
         atualizarFrota();
     }
+    atualizarPontos();
     atualizarBotoesZoom();
 }
 
@@ -1793,6 +1989,36 @@ function enviarRelato() {
 
 /* ---------- 9. Tela de configurações ---------- */
 
+/* ---------- Modo escuro ---------- */
+
+// Enquanto o morador não escolher, o app segue a preferência do aparelho.
+function preferenciaDoAparelho() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'escuro' : 'claro';
+}
+
+function temaAtual() {
+    return estado.config.tema || preferenciaDoAparelho();
+}
+
+function aplicarTema() {
+    const tema = temaAtual();
+    document.documentElement.setAttribute('data-tema', tema);
+
+    // A barra do navegador acompanha o fundo do app
+    const marca = document.querySelector('meta[name="theme-color"]');
+    if (marca) {
+        marca.setAttribute('content', tema === 'escuro' ? '#0B0F0C' : '#14532D');
+    }
+}
+
+function trocarTema(escuro) {
+    estado.config.tema = escuro ? 'escuro' : 'claro';
+    aplicarTema();
+    salvarPreferencias();
+    desenharConfiguracoes();
+}
+
 function desenharConfiguracoes() {
     const alvoRegiao = document.getElementById('chips-config-regiao');
     alvoRegiao.innerHTML = Object.keys(REGIOES).map(function (id) {
@@ -1822,6 +2048,16 @@ function desenharConfiguracoes() {
             '</button>' +
         '</div>';
     }).join('');
+
+    const chaveTema = document.getElementById('interruptor-tema');
+    if (chaveTema) {
+        const escuro = temaAtual() === 'escuro';
+        chaveTema.classList.toggle('interruptor--ligado', escuro);
+        chaveTema.setAttribute('aria-checked', escuro ? 'true' : 'false');
+        document.getElementById('texto-tema').textContent = estado.config.tema === null
+            ? 'Seguindo o ajuste do seu aparelho'
+            : (escuro ? 'Fundo escuro, melhor de ler à noite' : 'Fundo claro, melhor sob o sol');
+    }
 
     document.querySelectorAll('[data-chave]').forEach(function (botao) {
         botao.addEventListener('click', function () {
@@ -2028,6 +2264,7 @@ function verificarProximidade() {
 
 function iniciar() {
     carregarPreferencias();
+    aplicarTema();
 
     document.querySelectorAll('.aba').forEach(function (aba) {
         aba.addEventListener('click', function () {
@@ -2080,6 +2317,24 @@ function iniciar() {
             fecharQualquerFolha();
         }
     });
+
+    document.getElementById('interruptor-tema').addEventListener('click', function () {
+        trocarTema(temaAtual() !== 'escuro');
+    });
+
+    // Se o morador nunca escolheu, o app acompanha o aparelho quando ele muda
+    if (window.matchMedia) {
+        const escuta = window.matchMedia('(prefers-color-scheme: dark)');
+        const aoMudar = function () {
+            if (estado.config.tema === null) {
+                aplicarTema();
+                desenharConfiguracoes();
+            }
+        };
+        if (escuta.addEventListener) {
+            escuta.addEventListener('change', aoMudar);
+        }
+    }
 
     recomporAvisos();
     ligarGestosDoMapa();
