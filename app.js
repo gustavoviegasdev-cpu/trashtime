@@ -549,33 +549,83 @@ function tom(cor, quanto) {
 }
 
 function desenhoDoCaminhao(cor) {
-    const LADO = cor;                 // face virada para quem olha
-    const TOPO = tom(cor, 0.34);      // pega a luz de cima
-    const FUNDO = tom(cor, -0.22);    // a que foge para o fundo
-    const ESCURO = tom(cor, -0.42);
+    // A caçamba pega a cor do caminhão; a cabine é branca, como nos caminhões
+    // de coleta de verdade.
+    const CACAMBA = cor;
+    const TOPO = tom(cor, 0.30);
+    const TRASEIRA = tom(cor, -0.26);
+    const RIB = tom(cor, -0.13);
 
-    const P = 10;    // profundidade
-    const A = -15;   // altura da cacamba
-    const AC = -10;  // altura da cabine
+    const CABINE = '#F1F4F2';
+    const CABINE_TOPO = '#FFFFFF';
+    const CABINE_FRENTE = '#DCE3DE';
+    const VIDRO = '#2C3B44';
+    const VIDRO_CLARO = '#40535D';
+
+    const CHASSI = '#2A332D';
+    const PNEU = '#1B221D';
+    const ARO = '#98A49C';
+
+    const P = 11;                      // profundidade
+    const X0 = -16, X1 = 3, X2 = 15;   // traseira, junta caçamba-cabine, frente
+    const CH_T = -7, CH_B = -4.6;      // chassi
+    const C_T = -20;                   // teto da caçamba
+    const K_T = -15.4;                 // teto da cabine
+    const RODA_Y = -4.2, RODA_R = 4.3;
+
+    const poli = function (preenche, pontos, extra) {
+        return '<polygon fill="' + preenche + '" points="' + face(pontos) + '"' +
+            (extra || '') + ' />';
+    };
+    const roda = function (x, z, escala) {
+        const c = proj(x, RODA_Y, z).split(',');
+        return '<g class="caminhao__roda">' +
+            '<circle fill="' + PNEU + '" cx="' + esc(Number(c[0])) + '" cy="' + esc(Number(c[1])) +
+                '" r="' + esc(RODA_R * escala) + '" />' +
+            '<circle fill="' + ARO + '" cx="' + esc(Number(c[0])) + '" cy="' + esc(Number(c[1])) +
+                '" r="' + esc(1.9 * escala) + '" />' +
+        '</g>';
+    };
 
     return (
-        '<polygon fill="' + LADO + '" points="' + face([[-14,0,0],[6,0,0],[6,A,0],[-14,A,0]]) + '" />' +
-        '<polygon fill="' + TOPO + '" points="' + face([[-14,A,0],[6,A,0],[6,A,P],[-14,A,P]]) + '" />' +
-        '<polygon fill="' + FUNDO + '" points="' + face([[-14,0,0],[-14,A,0],[-14,A,P],[-14,0,P]]) + '" />' +
-        '<polygon fill="' + ESCURO + '" opacity="0.35" points="' +
-            face([[-14,-3,1],[-14,-12,1],[-14,-12,9],[-14,-3,9]]) + '" />' +
-        '<polygon fill="' + LADO + '" points="' + face([[6,0,0],[14,0,0],[14,AC,0],[6,AC,0]]) + '" />' +
-        '<polygon fill="' + TOPO + '" points="' + face([[6,AC,0],[14,AC,0],[14,AC,P],[6,AC,P]]) + '" />' +
-        '<polygon fill="' + FUNDO + '" points="' + face([[14,0,0],[14,AC,0],[14,AC,P],[14,0,P]]) + '" />' +
-        '<polygon fill="#DCEAF5" points="' + face([[7.4,-3,-0.4],[12.6,-3,-0.4],[12.6,-8.6,-0.4],[7.4,-8.6,-0.4]]) + '" />' +
-        '<polygon fill="#EAF3FA" points="' + face([[14.3,-3,1],[14.3,-8.6,1],[14.3,-8.6,9],[14.3,-3,9]]) + '" />' +
-        '<polygon fill="#FFFFFF" opacity="0.8" points="' + face([[-12.5,-4.2,-0.35],[4.5,-4.2,-0.35],[4.5,-7,-0.35],[-12.5,-7,-0.35]]) + '" />' +
-        '<g class="caminhao__roda"><circle fill="#26302A" cx="' + esc(-8) + '" cy="' + esc(0.5) + '" r="' + esc(3.9) + '" />' +
-            '<circle fill="' + tom(cor, 0.55) + '" cx="' + esc(-8) + '" cy="' + esc(0.5) + '" r="' + esc(1.5) + '" /></g>' +
-        '<g class="caminhao__roda"><circle fill="#26302A" cx="' + esc(9) + '" cy="' + esc(0.5) + '" r="' + esc(3.9) + '" />' +
-            '<circle fill="' + tom(cor, 0.55) + '" cx="' + esc(9) + '" cy="' + esc(0.5) + '" r="' + esc(1.5) + '" /></g>' +
-        '<circle class="caminhao__giroflex" fill="#F5C542" cx="' + esc(10 + FUGA_X * 5) +
-            '" cy="' + esc(AC - 1.4 - FUGA_Y * 5) + '" r="' + esc(1.8) + '" />'
+        // rodas do lado de lá, só espiando por trás do caminhão
+        roda(-9, P - 2.5, 0.9) + roda(9.5, P - 2.5, 0.9) +
+
+        // chassi, a viga que liga os dois eixos
+        poli(CHASSI, [[X0, CH_T, 0], [X2, CH_T, 0], [X2, CH_B, 0], [X0, CH_B, 0]]) +
+
+        // caçamba: traseira, teto e a tampa embutida
+        poli(TRASEIRA, [[X0, CH_T, 0], [X0, C_T, 0], [X0, C_T, P], [X0, CH_T, P]]) +
+        poli(TOPO, [[X0, C_T, 0], [X1, C_T, 0], [X1, C_T, P], [X0, C_T, P]]) +
+        poli(tom(cor, 0.44), [[X0 + 2.5, C_T, 2], [X1 - 2, C_T, 2], [X1 - 2, C_T, P - 2], [X0 + 2.5, C_T, P - 2]]) +
+
+        // cabine: teto e frente, com o para-brisa
+        poli(CABINE_TOPO, [[X1, K_T, 0], [X2, K_T, 0], [X2, K_T, P], [X1, K_T, P]]) +
+        poli(CABINE_FRENTE, [[X2, CH_B, 0], [X2, K_T, 0], [X2, K_T, P], [X2, CH_B, P]]) +
+        poli(VIDRO, [[X2 + 0.25, -7.4, 1.2], [X2 + 0.25, K_T + 1.4, 1.2],
+                     [X2 + 0.25, K_T + 1.4, P - 1.2], [X2 + 0.25, -7.4, P - 1.2]]) +
+        poli(VIDRO_CLARO, [[X2 + 0.4, -7.4, 1.2], [X2 + 0.4, -10.2, 1.2],
+                           [X2 + 0.4, -10.2, 4.6], [X2 + 0.4, -7.4, 4.6]]) +
+
+        // lateral da caçamba, com o vinco da tampa e a faixa refletiva
+        poli(CACAMBA, [[X0, CH_T, 0], [X1, CH_T, 0], [X1, C_T, 0], [X0, C_T, 0]]) +
+        poli(RIB, [[X0 + 1.6, -8.4, -0.3], [X1 - 1, -8.4, -0.3], [X1 - 1, -9.6, -0.3], [X0 + 1.6, -9.6, -0.3]]) +
+        poli('#FFFFFF', [[X0 + 1.6, -12.6, -0.35], [X1 - 1, -12.6, -0.35],
+                         [X1 - 1, -14.4, -0.35], [X0 + 1.6, -14.4, -0.35]], ' opacity="0.72"') +
+
+        // lateral da cabine, com a porta e a janela
+        poli(CABINE, [[X1, CH_T, 0], [X2, CH_T, 0], [X2, K_T, 0], [X1, K_T, 0]]) +
+        poli(VIDRO, [[X1 + 1.2, -8.2, -0.3], [X2 - 1.4, -8.2, -0.3],
+                     [X2 - 1.4, -12.8, -0.3], [X1 + 1.2, -12.8, -0.3]]) +
+        poli(CABINE_FRENTE, [[X1 + 1, CH_T, -0.3], [X1 + 1.5, CH_T, -0.3],
+                             [X1 + 1.5, K_T, -0.3], [X1 + 1, K_T, -0.3]]) +
+
+        // rodas da frente para quem olha
+        roda(-9, 0.4, 1) + roda(9.5, 0.4, 1) +
+
+        // giroflex no teto da cabine
+        '<circle class="caminhao__giroflex" fill="#F5C542" cx="' + esc(X1 + 2.4 + FUGA_X * 5.5) +
+            '" cy="' + esc(K_T - 1.5 - FUGA_Y * 5.5) + '" r="' + esc(1.7) + '" />'
     );
 }
 
@@ -643,7 +693,7 @@ function montarFrota() {
     CAMINHOES.forEach(function (caminhao) {
         svg += '<g class="caminhao-marcador" id="marcador-' + caminhao.id + '" tabindex="0" role="button">' +
             '<circle id="halo-' + caminhao.id + '" class="caminhao__halo" r="24" fill="' + caminhao.cor + '" opacity="0.14" />' +
-            '<ellipse class="caminhao__chao" cx="1" cy="6.4" rx="18" ry="4.4" />' +
+            '<ellipse class="caminhao__chao" cx="1.5" cy="1.8" rx="19" ry="4" />' +
             '<g class="caminhao__corpo">' + desenhoDoCaminhao(caminhao.cor) + '</g>' +
             '<circle class="caminhao__toque" r="21" fill="transparent" />' +
         '</g>';
