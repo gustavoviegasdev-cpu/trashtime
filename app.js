@@ -99,7 +99,7 @@ const MESES_MIN = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', '
 const CAMINHOES = [
     {
         id: 'ct052', nome: 'Caminhão CT-052', setor: 'Setor Umarizal',
-        cor: '#2FA85A', velocidade: 1.4, progresso: 0.3, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.4, progresso: 0.3, voltas: 0,
         rota: [
             { x: 156.9, y: 57.2 }, { x: 342.5, y: 44.3 }, { x: 339.2, y: -1.6 },
             { x: 277.4, y: 2.7 }, { x: 274.2, y: -43.2 }, { x: 150.5, y: -34.5 },
@@ -114,7 +114,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct063', nome: 'Caminhão CT-063', setor: 'Setor Reduto',
-        cor: '#2FA85A', velocidade: 1.2, progresso: 0.55, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.2, progresso: 0.55, voltas: 0,
         rota: [
             { x: 163.3, y: 149.0 }, { x: 348.9, y: 136.0 }, { x: 345.7, y: 90.2 },
             { x: 160.1, y: 103.1 }, { x: 163.3, y: 149.0 }
@@ -126,7 +126,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct104', nome: 'Caminhão CT-104', setor: 'Setor Campina',
-        cor: '#2FA85A', velocidade: 1.6, progresso: 0.46, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.6, progresso: 0.46, voltas: 0,
         rota: [
             { x: 169.7, y: 240.8 }, { x: 355.3, y: 227.8 }, { x: 352.1, y: 181.9 },
             { x: 166.5, y: 194.9 }, { x: 169.7, y: 240.8 }
@@ -138,7 +138,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct118', nome: 'Caminhão CT-118', setor: 'Setor Cidade Velha',
-        cor: '#2FA85A', velocidade: 1.1, progresso: 0.3, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.1, progresso: 0.3, voltas: 0,
         rota: [
             { x: 173.0, y: 286.7 }, { x: 296.6, y: 278.0 }, { x: 299.9, y: 323.9 },
             { x: 238.0, y: 328.2 }, { x: 241.2, y: 374.1 }, { x: 179.4, y: 378.5 },
@@ -153,7 +153,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct090', nome: 'Caminhão CT-090', setor: 'Setor Nazaré',
-        cor: '#2FA85A', velocidade: 1.3, progresso: 0.22, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.3, progresso: 0.22, voltas: 0,
         rota: [
             { x: 345.7, y: 90.2 }, { x: 531.2, y: 77.2 }, { x: 528.0, y: 31.3 },
             { x: 342.5, y: 44.3 }, { x: 345.7, y: 90.2 }
@@ -165,7 +165,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct071', nome: 'Caminhão CT-071', setor: 'Setor São Brás',
-        cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
+        cor: '#8A968D', olhando: 1, velocidade: 0, progresso: 0, voltas: 0,
         rota: [
             { x: 534.4, y: 123.1 }, { x: 720.0, y: 110.1 }, { x: 716.8, y: 64.2 },
             { x: 654.9, y: 68.5 }, { x: 651.7, y: 22.6 }, { x: 528.0, y: 31.3 },
@@ -180,7 +180,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct076', nome: 'Caminhão CT-076', setor: 'Setor Batista Campos',
-        cor: '#2FA85A', velocidade: 1.5, progresso: 0.38, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.5, progresso: 0.38, voltas: 0,
         rota: [
             { x: 355.3, y: 227.8 }, { x: 540.8, y: 214.8 }, { x: 537.6, y: 169.0 },
             { x: 352.1, y: 181.9 }, { x: 355.3, y: 227.8 }
@@ -192,7 +192,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct085', nome: 'Caminhão CT-085', setor: 'Setor Jurunas',
-        cor: '#2FA85A', velocidade: 1.25, progresso: 0.62, voltas: 0,
+        cor: '#2FA85A', olhando: 1, velocidade: 1.25, progresso: 0.62, voltas: 0,
         rota: [
             { x: 306.3, y: 415.7 }, { x: 491.8, y: 402.7 }, { x: 488.6, y: 356.8 },
             { x: 303.1, y: 369.8 }, { x: 306.3, y: 415.7 }
@@ -204,7 +204,7 @@ const CAMINHOES = [
     },
     {
         id: 'ct099', nome: 'Caminhão CT-099', setor: 'Setor Guamá',
-        cor: '#8A968D', velocidade: 0, progresso: 0, voltas: 0,
+        cor: '#8A968D', olhando: 1, velocidade: 0, progresso: 0, voltas: 0,
         rota: [
             { x: 495.0, y: 448.6 }, { x: 680.6, y: 435.6 }, { x: 677.4, y: 389.7 },
             { x: 615.5, y: 394.1 }, { x: 612.3, y: 348.2 }, { x: 488.6, y: 356.8 },
@@ -548,84 +548,149 @@ function tom(cor, quanto) {
     return '#' + canal.map(function (c) { return ('0' + c.toString(16)).slice(-2); }).join('');
 }
 
+// As definições que o desenho usa: a sombra do chão e o degradê que faz a
+// lateral da caçamba receber mais luz em cima do que embaixo.
+function defsDoCaminhao() {
+    const cores = [];
+    CAMINHOES.forEach(function (c) {
+        if (cores.indexOf(c.cor) < 0) {
+            cores.push(c.cor);
+        }
+    });
+    return '<defs>' +
+        '<radialGradient id="sombra-caminhao">' +
+            '<stop offset="0.35" stop-color="#0F1D14" stop-opacity="0.34" />' +
+            '<stop offset="1" stop-color="#0F1D14" stop-opacity="0" />' +
+        '</radialGradient>' +
+        cores.map(function (cor) {
+            return '<linearGradient id="lado-' + cor.slice(1) + '" x1="0" y1="0" x2="0" y2="1">' +
+                '<stop offset="0" stop-color="' + tom(cor, 0.16) + '" />' +
+                '<stop offset="1" stop-color="' + tom(cor, -0.10) + '" />' +
+            '</linearGradient>';
+        }).join('') +
+    '</defs>';
+}
+
 function desenhoDoCaminhao(cor) {
-    // A caçamba pega a cor do caminhão; a cabine é branca, como nos caminhões
-    // de coleta de verdade.
-    const CACAMBA = cor;
-    const TOPO = tom(cor, 0.30);
-    const TRASEIRA = tom(cor, -0.26);
-    const RIB = tom(cor, -0.13);
+    // Caçamba com a cor do caminhão, cabine branca - como nos caminhões de
+    // coleta de verdade. Atrás fica a tremonha, aquela rampa inclinada onde o
+    // lixo é despejado: é ela que faz o contorno ser reconhecível de longe.
+    const LADO = 'url(#lado-' + cor.slice(1) + ')';
+    const TOPO = tom(cor, 0.32);
+    const RAMPA = tom(cor, 0.12);
+    const TRASEIRA = tom(cor, -0.28);
+    const VINCO = tom(cor, -0.20);
 
     const CABINE = '#F1F4F2';
     const CABINE_TOPO = '#FFFFFF';
     const CABINE_FRENTE = '#DCE3DE';
     const VIDRO = '#2C3B44';
-    const VIDRO_CLARO = '#40535D';
+    const VIDRO_CLARO = '#445862';
 
     const CHASSI = '#2A332D';
+    const PARACHOQUE = '#39443C';
+    const FAROL = '#FFE9A8';
     const PNEU = '#1B221D';
-    const ARO = '#98A49C';
+    const ARO = '#9BA79F';
+    const CUBO = '#5C6862';
 
-    const P = 11;                      // profundidade
-    const X0 = -16, X1 = 3, X2 = 15;   // traseira, junta caçamba-cabine, frente
-    const CH_T = -7, CH_B = -4.6;      // chassi
-    const C_T = -20;                   // teto da caçamba
-    const K_T = -15.4;                 // teto da cabine
+    const P = 11;                        // profundidade
+    const X0 = -17, XR = -11.5;          // traseira e o pé da rampa
+    const X1 = 1.5, X2 = 15, XF = 16.4;  // junta, frente da cabine, para-choque
+    const CH_T = -7, CH_B = -4.4;        // chassi
+    const C_T = -20, R_T = -15.2;        // teto da caçamba e topo da traseira
+    const K_T = -15.4;                   // teto da cabine
     const RODA_Y = -4.2, RODA_R = 4.3;
+    const EIXO_TRAS = -9.5, EIXO_FRENTE = 9.8;
 
     const poli = function (preenche, pontos, extra) {
-        return '<polygon fill="' + preenche + '" points="' + face(pontos) + '"' +
-            (extra || '') + ' />';
+        return '<polygon fill="' + preenche + '" points="' + face(pontos) + '"' + (extra || '') + ' />';
     };
-    const roda = function (x, z, escala) {
+
+    // A aba do para-lama: um arco fino por cima do pneu, não uma mancha cheia
+    const paraLama = function (x) {
+        const c = proj(x, CH_T + 0.6, 0).split(',');
+        const r = RODA_R + 0.9;
+        return '<path fill="none" stroke="' + CHASSI + '" stroke-width="' + esc(1) +
+            '" stroke-linecap="round" d="M' + esc(Number(c[0]) - r) + ' ' + esc(Number(c[1])) +
+            ' a' + esc(r) + ' ' + esc(r) + ' 0 0 1 ' + esc(r * 2) + ' 0" />';
+    };
+
+    const roda = function (x, z, k) {
         const c = proj(x, RODA_Y, z).split(',');
+        const cx = esc(Number(c[0])), cy = esc(Number(c[1]));
         return '<g class="caminhao__roda">' +
-            '<circle fill="' + PNEU + '" cx="' + esc(Number(c[0])) + '" cy="' + esc(Number(c[1])) +
-                '" r="' + esc(RODA_R * escala) + '" />' +
-            '<circle fill="' + ARO + '" cx="' + esc(Number(c[0])) + '" cy="' + esc(Number(c[1])) +
-                '" r="' + esc(1.9 * escala) + '" />' +
+            '<circle fill="' + PNEU + '" cx="' + cx + '" cy="' + cy + '" r="' + esc(RODA_R * k) + '" />' +
+            '<circle fill="' + ARO + '" cx="' + cx + '" cy="' + cy + '" r="' + esc(2.3 * k) + '" />' +
+            '<circle fill="' + CUBO + '" cx="' + cx + '" cy="' + cy + '" r="' + esc(0.85 * k) + '" />' +
         '</g>';
     };
 
     return (
-        // rodas do lado de lá, só espiando por trás do caminhão
-        roda(-9, P - 2.5, 0.9) + roda(9.5, P - 2.5, 0.9) +
+        // ---- o que fica do outro lado, atrás de tudo ----
+        roda(EIXO_TRAS, P - 2.5, 0.88) + roda(EIXO_FRENTE, P - 2.5, 0.88) +
 
-        // chassi, a viga que liga os dois eixos
-        poli(CHASSI, [[X0, CH_T, 0], [X2, CH_T, 0], [X2, CH_B, 0], [X0, CH_B, 0]]) +
+        // escapamento subindo atrás da cabine
+        poli('#77837B', [[X1 + 0.7, K_T + 1, P - 3], [X1 + 1.7, K_T + 1, P - 3],
+                         [X1 + 1.7, K_T - 3.4, P - 3], [X1 + 0.7, K_T - 3.4, P - 3]]) +
 
-        // caçamba: traseira, teto e a tampa embutida
-        poli(TRASEIRA, [[X0, CH_T, 0], [X0, C_T, 0], [X0, C_T, P], [X0, CH_T, P]]) +
-        poli(TOPO, [[X0, C_T, 0], [X1, C_T, 0], [X1, C_T, P], [X0, C_T, P]]) +
-        poli(tom(cor, 0.44), [[X0 + 2.5, C_T, 2], [X1 - 2, C_T, 2], [X1 - 2, C_T, P - 2], [X0 + 2.5, C_T, P - 2]]) +
+        // ---- chassi e para-choques ----
+        poli(CHASSI, [[X0, CH_T, 0], [XF, CH_T, 0], [XF, CH_B, 0], [X0, CH_B, 0]]) +
+        poli(PARACHOQUE, [[XF - 1.4, CH_T + 0.4, -0.4], [XF, CH_T + 0.4, -0.4],
+                          [XF, CH_B + 0.6, -0.4], [XF - 1.4, CH_B + 0.6, -0.4]]) +
+        poli(PARACHOQUE, [[X0 - 1.2, CH_T + 0.6, -0.4], [X0 + 0.6, CH_T + 0.6, -0.4],
+                          [X0 + 0.6, CH_B + 0.4, -0.4], [X0 - 1.2, CH_B + 0.4, -0.4]]) +
 
-        // cabine: teto e frente, com o para-brisa
+        // ---- caçamba: traseira, rampa da tremonha, teto ----
+        poli(TRASEIRA, [[X0, CH_T, 0], [X0, R_T, 0], [X0, R_T, P], [X0, CH_T, P]]) +
+        poli(RAMPA, [[X0, R_T, 0], [XR, C_T, 0], [XR, C_T, P], [X0, R_T, P]]) +
+        poli(TOPO, [[XR, C_T, 0], [X1, C_T, 0], [X1, C_T, P], [XR, C_T, P]]) +
+        poli(tom(cor, 0.46), [[XR + 2, C_T, 2.2], [X1 - 1.8, C_T, 2.2],
+                              [X1 - 1.8, C_T, P - 2.2], [XR + 2, C_T, P - 2.2]]) +
+
+        // ---- cabine: teto, frente, para-brisa, grade e farol ----
         poli(CABINE_TOPO, [[X1, K_T, 0], [X2, K_T, 0], [X2, K_T, P], [X1, K_T, P]]) +
         poli(CABINE_FRENTE, [[X2, CH_B, 0], [X2, K_T, 0], [X2, K_T, P], [X2, CH_B, P]]) +
-        poli(VIDRO, [[X2 + 0.25, -7.4, 1.2], [X2 + 0.25, K_T + 1.4, 1.2],
-                     [X2 + 0.25, K_T + 1.4, P - 1.2], [X2 + 0.25, -7.4, P - 1.2]]) +
-        poli(VIDRO_CLARO, [[X2 + 0.4, -7.4, 1.2], [X2 + 0.4, -10.2, 1.2],
-                           [X2 + 0.4, -10.2, 4.6], [X2 + 0.4, -7.4, 4.6]]) +
+        poli(VIDRO, [[X2 + 0.25, -8, 1.2], [X2 + 0.25, K_T + 1.5, 1.2],
+                     [X2 + 0.25, K_T + 1.5, P - 1.2], [X2 + 0.25, -8, P - 1.2]]) +
+        poli(VIDRO_CLARO, [[X2 + 0.4, -8, 1.2], [X2 + 0.4, -10.8, 1.2],
+                           [X2 + 0.4, -10.8, 4.8], [X2 + 0.4, -8, 4.8]]) +
+        poli(CHASSI, [[X2 + 0.3, -5.6, 2.4], [X2 + 0.3, -7, 2.4],
+                      [X2 + 0.3, -7, P - 2.4], [X2 + 0.3, -5.6, P - 2.4]], ' opacity="0.5"') +
+        poli(FAROL, [[X2 + 0.35, -4.6, 1], [X2 + 0.35, -5.6, 1],
+                     [X2 + 0.35, -5.6, 3.2], [X2 + 0.35, -4.6, 3.2]]) +
+        poli(FAROL, [[X2 + 0.35, -4.6, P - 3.2], [X2 + 0.35, -5.6, P - 3.2],
+                     [X2 + 0.35, -5.6, P - 1], [X2 + 0.35, -4.6, P - 1]]) +
 
-        // lateral da caçamba, com o vinco da tampa e a faixa refletiva
-        poli(CACAMBA, [[X0, CH_T, 0], [X1, CH_T, 0], [X1, C_T, 0], [X0, C_T, 0]]) +
-        poli(RIB, [[X0 + 1.6, -8.4, -0.3], [X1 - 1, -8.4, -0.3], [X1 - 1, -9.6, -0.3], [X0 + 1.6, -9.6, -0.3]]) +
-        poli('#FFFFFF', [[X0 + 1.6, -12.6, -0.35], [X1 - 1, -12.6, -0.35],
-                         [X1 - 1, -14.4, -0.35], [X0 + 1.6, -14.4, -0.35]], ' opacity="0.72"') +
+        // ---- lataria do lado de cá ----
+        poli(LADO, [[X0, CH_T, 0], [X1, CH_T, 0], [X1, C_T, 0], [XR, C_T, 0], [X0, R_T, 0]]) +
+        poli(VINCO, [[X0 + 1.4, -9, -0.3], [X1 - 1, -9, -0.3], [X1 - 1, -10.2, -0.3], [X0 + 1.4, -10.2, -0.3]]) +
+        poli('#FFFFFF', [[X0 + 1.4, -12.8, -0.35], [X1 - 1, -12.8, -0.35],
+                         [X1 - 1, -14.6, -0.35], [X0 + 1.4, -14.6, -0.35]], ' opacity="0.72"') +
+        paraLama(EIXO_TRAS) +
 
-        // lateral da cabine, com a porta e a janela
+        // ---- lateral da cabine, porta e janela ----
         poli(CABINE, [[X1, CH_T, 0], [X2, CH_T, 0], [X2, K_T, 0], [X1, K_T, 0]]) +
-        poli(VIDRO, [[X1 + 1.2, -8.2, -0.3], [X2 - 1.4, -8.2, -0.3],
-                     [X2 - 1.4, -12.8, -0.3], [X1 + 1.2, -12.8, -0.3]]) +
-        poli(CABINE_FRENTE, [[X1 + 1, CH_T, -0.3], [X1 + 1.5, CH_T, -0.3],
-                             [X1 + 1.5, K_T, -0.3], [X1 + 1, K_T, -0.3]]) +
+        poli(VIDRO, [[X1 + 1.3, -8.6, -0.3], [X2 - 1.5, -8.6, -0.3],
+                     [X2 - 1.5, -13.4, -0.3], [X1 + 1.3, -13.4, -0.3]]) +
+        poli(CABINE_FRENTE, [[X1 + 1.2, CH_T, -0.3], [X1 + 1.7, CH_T, -0.3],
+                             [X1 + 1.7, K_T, -0.3], [X1 + 1.2, K_T, -0.3]]) +
+        poli('#8E9A93', [[X1, CH_T, -0.35], [X1 + 0.45, CH_T, -0.35],
+                         [X1 + 0.45, K_T, -0.35], [X1, K_T, -0.35]]) +
+        paraLama(EIXO_FRENTE) +
 
-        // rodas da frente para quem olha
-        roda(-9, 0.4, 1) + roda(9.5, 0.4, 1) +
+        // retrovisor
+        poli('#4A554D', [[X2 - 1.6, -13.2, -0.5], [X2 - 0.4, -13.2, -0.5],
+                         [X2 - 0.4, -13.6, -0.5], [X2 - 1.6, -13.6, -0.5]]) +
+        poli('#4A554D', [[X2 - 1.9, -12.2, -0.5], [X2 - 1, -12.2, -0.5],
+                         [X2 - 1, -14.2, -0.5], [X2 - 1.9, -14.2, -0.5]]) +
+
+        // ---- rodas do lado de cá ----
+        roda(EIXO_TRAS, 0.4, 1) + roda(EIXO_FRENTE, 0.4, 1) +
 
         // giroflex no teto da cabine
-        '<circle class="caminhao__giroflex" fill="#F5C542" cx="' + esc(X1 + 2.4 + FUGA_X * 5.5) +
-            '" cy="' + esc(K_T - 1.5 - FUGA_Y * 5.5) + '" r="' + esc(1.7) + '" />'
+        '<circle class="caminhao__giroflex" fill="#F5C542" cx="' + esc(X1 + 2.6 + FUGA_X * 5.5) +
+            '" cy="' + esc(K_T - 1.6 - FUGA_Y * 5.5) + '" r="' + esc(1.7) + '" />'
     );
 }
 
@@ -672,7 +737,7 @@ function atualizarPontos() {
 
 function montarFrota() {
     const camada = document.getElementById('camada-frota');
-    let svg = '';
+    let svg = defsDoCaminhao();
 
     // Cada rota tem três pedaços, um por estado da legenda
     CAMINHOES.forEach(function (caminhao) {
@@ -693,8 +758,9 @@ function montarFrota() {
     CAMINHOES.forEach(function (caminhao) {
         svg += '<g class="caminhao-marcador" id="marcador-' + caminhao.id + '" tabindex="0" role="button">' +
             '<circle id="halo-' + caminhao.id + '" class="caminhao__halo" r="24" fill="' + caminhao.cor + '" opacity="0.14" />' +
-            '<ellipse class="caminhao__chao" cx="1.5" cy="1.8" rx="19" ry="4" />' +
-            '<g class="caminhao__corpo">' + desenhoDoCaminhao(caminhao.cor) + '</g>' +
+            '<ellipse class="caminhao__chao" cx="1.5" cy="2" rx="24" ry="6.5" />' +
+            '<g class="caminhao__corpo"><g class="caminhao__frente" id="frente-' + caminhao.id + '">' +
+                desenhoDoCaminhao(caminhao.cor) + '</g></g>' +
             '<circle class="caminhao__toque" r="21" fill="transparent" />' +
         '</g>';
     });
@@ -762,6 +828,21 @@ function atualizarFrota() {
         desenhar(pendente, ateOndePrevisto, total, 4.5, [2, 9]);
 
         const ponto = pontoEm(caminhao.rota, andado);
+
+        // Vira o caminhão para o lado em que ele está indo: sem isso, na volta
+        // do circuito ele desceria a rua de marcha a ré.
+        if (caminhao.velocidade > 0) {
+            const adiante = pontoEm(caminhao.rota, Math.min(andado + 6, total));
+            const dx = adiante.x - ponto.x;
+            if (Math.abs(dx) > 0.4) {
+                caminhao.olhando = dx < 0 ? -1 : 1;
+            }
+        }
+        const frente = document.getElementById('frente-' + caminhao.id);
+        if (frente) {
+            frente.setAttribute('transform', caminhao.olhando === -1 ? 'scale(-1,1)' : 'scale(1,1)');
+        }
+
         const marcador = document.getElementById('marcador-' + caminhao.id);
         marcador.setAttribute('transform',
             'translate(' + ponto.x.toFixed(1) + ',' + ponto.y.toFixed(1) + ') scale(' + escala.toFixed(3) + ')');

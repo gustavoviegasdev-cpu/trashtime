@@ -477,7 +477,7 @@ button {
 }
 
 .caminhao__chao {
-    fill: var(--mapa-sombra);
+    fill: url(#sombra-caminhao);
 }
 
 /* A carroceria gira devagar em torno do próprio eixo. O perspective faz a
@@ -485,6 +485,12 @@ button {
 .caminhao__corpo {
     transform-box: fill-box;
     transform-origin: 50% 78%;
+}
+
+/* A virada acompanha o sentido da rua, com um instante de transição para
+   não parecer que o caminhão pulou de lado. */
+.caminhao__frente {
+    transition: transform 0.25s ease;
 }
 
 .caminhao-marcador--andando .caminhao__corpo {
