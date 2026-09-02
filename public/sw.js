@@ -3,13 +3,15 @@
    imagens. Assim uma versão nova chega sozinha a quem já visitou, e o app
    continua abrindo sem internet. */
 
-const CACHE = 'trashtime-v6';
+const CACHE = 'trashtime-v7';
 
+/* O empacotador carimba um código no nome de cada arquivo gerado
+   (recursos/index-Cet-lnag.js), e esse nome muda a cada publicação. Por isso a
+   lista fixa de antes não serve mais: aqui só entram os endereços estáveis. O
+   resto é guardado na primeira vez que o navegador pede - a busca é "rede
+   primeiro", então quem já visitou recebe a versão nova assim que ela sai. */
 const ARQUIVOS = [
     './',
-    './index.html',
-    './style.css',
-    './app.js',
     './manifest.json',
     './icone-192.png',
     './icone-512.png'
@@ -78,7 +80,7 @@ self.addEventListener('fetch', function (evento) {
                             return guardado;
                         }
                         if (pedido.mode === 'navigate') {
-                            return caches.match('./index.html');
+                            return caches.match('./');
                         }
                         return Response.error();
                     });

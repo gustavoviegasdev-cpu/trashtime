@@ -6,187 +6,107 @@ passaram e o que ainda falta, informa os dias e horários de coleta de cada
 bairro, avisa quando o caminhão se aproxima e permite ao morador registrar um
 problema quando o serviço falha.
 
-Os bairros atendidos são **Campina**, **Cidade Velha**, **Nazaré** e **Batista
-Campos**, e o mapa reproduz a orla da Baía do Guajará, que é o que define o
-desenho do centro da cidade. As ruas dos itinerários são reais: Boulevard
-Castilhos França, Avenida Presidente Vargas, Rua Siqueira Mendes, Avenida
-Gentil Bittencourt, entre outras.
+São nove bairros: **Umarizal**, **Reduto**, **Campina**, **Cidade Velha**,
+**Nazaré**, **São Brás**, **Batista Campos**, **Jurunas** e **Guamá**. O mapa
+reproduz a península de Belém — a Baía do Guajará a oeste, o Rio Guamá ao sul e
+a Ilha do Combu do outro lado — e traz onze pontos que qualquer belenense
+reconhece: Ver-o-Peso, Estação das Docas, Teatro da Paz, Forte do Presépio,
+Mangal das Garças, Basílica de Nazaré, Praça Batista Campos, Mercado de São
+Brás, Bosque Rodrigues Alves e a UFPA. As ruas dos itinerários são reais.
 
-## Como abrir
+## Tecnologia
 
-**Direto:** abra o arquivo `index.html` no navegador — dois cliques bastam. Não
-precisa instalar nada, nem servidor, nem build.
+**Vue 3** com **Vite**. Estilo próprio, sem framework de CSS.
 
-**Como aplicativo instalável:** rode `./servir.sh` e acesse
-<http://localhost:8000>. Servido por HTTP, o navegador oferece instalar o
-TrashTime na tela inicial, ele abre em tela cheia sem barra de endereço e
-**funciona sem internet**. Abrindo o arquivo direto (`file://`) o navegador
-bloqueia o service worker, então essa parte só vale servida.
+O mapa não usa biblioteca de mapas: é SVG desenhado por cálculo. A malha de ruas
+sai de uma única fórmula — `P(i,j) = origem + i×62×u + j×46×v`, com as vias a
+−4° — e as rotas dos caminhões correm sobre os cruzamentos dela. O caminhão é um
+volume de 24 faces, montado por uma projeção que leva cada ponto do espaço às
+duas coordenadas do desenho.
 
-Para instalar no celular, use o IP desta máquina na mesma rede — por exemplo
-`http://192.168.0.10:8000`.
-
-## Publicar na web (Vercel)
-
-O projeto é estático, então não há build. Na pasta do projeto:
+## Como rodar
 
 ```bash
-npx vercel login     # uma vez, autentica sua conta
-npx vercel --prod    # publica e devolve a URL
+npm install     # uma vez
+npm run dev     # abre em http://localhost:5173
 ```
 
-A primeira publicação pergunta o nome do projeto e o diretório — aceite os
-padrões (o diretório é `./`). O `vercel.json` já cuida do detalhe que costuma
-morder: o `sw.js` é servido sem cache, senão o navegador segura a versão antiga
-do service worker e as atualizações não chegam.
+Para gerar a versão publicável:
 
-Publicado em HTTPS, o TrashTime fica instalável de qualquer celular, sem
-precisar estar na mesma rede.
+```bash
+npm run build   # sai em dist/
+npm run preview # confere o resultado do build
+```
 
-Qualquer hospedagem de arquivos estáticos serve igual — GitHub Pages, Netlify,
-Cloudflare Pages — desde que seja HTTPS, que é exigência do service worker.
+## Como está organizado
 
-## Arquivos
+```
+index.html            entrada: o Vite injeta o app aqui
+public/               copiado sem alteração para dist/
+  manifest.json         para o app ser instalável
+  sw.js                 service worker: abre sem internet
+  icone-*.png
+src/
+  main.js             monta o app e liga tema e persistência
+  App.vue             troca de tela, folhas e o relógio da simulação
+  dados/              bairros, frota, pontos e listas fixas
+  nucleo/             funções puras: geometria, datas e o desenho 3D
+  estado/             estado reativo, tema e as contas que dependem dele
+  mapa/               o SVG do mapa, o zoom e os gestos de toque
+  telas/              as quatro telas
+  componentes/        abas, folhas, boas-vindas, alerta
+  estilo/base.css     toda a aparência, incluindo o modo escuro
+```
 
-| Arquivo | O que faz |
-|---|---|
-| `index.html` | Estrutura das telas e os ícones em SVG |
-| `style.css` | Aparência: paleta, tipografia e componentes |
-| `app.js` | Toda a lógica: rotas, calendário, avisos, relatos |
-| `manifest.json` | Identidade do app instalável: nome, cores, ícones |
-| `sw.js` | Service worker: guarda o app para funcionar sem internet |
-| `servir.sh` | Sobe um servidor local na porta 8000 |
-| `vercel.json` | Cabeçalhos de publicação (impede cache do service worker) |
-| `icone-*.png` | Ícones do app, gerados a partir do ícone do caminhão |
+A divisão segue uma regra: **`nucleo/` não sabe que existe tela nem estado**. São
+funções que recebem números e devolvem números — dá para testá-las no Node, sem
+navegador. `estado/` conhece o estado do app. `mapa/`, `telas/` e `componentes/`
+conhecem a tela.
 
-Os arquivos `.dc.html` e `trashtime-app.html` são o **protótipo visual** que
-originou o app, e não fazem parte da aplicação.
+## O que o Vue trouxe
 
-## O que o app faz
+Na versão anterior, feita sem framework, havia vinte funções `desenharX()` que
+montavam HTML em texto. Depois de mexer no estado era preciso lembrar de chamar
+as certas — e esquecer uma deixava a tela desatualizada.
 
-### Mapa
-- Três caminhões percorrem suas rotas pelas ruas, avançando a cada segundo.
-- O trajeto de cada caminhão é dividido nos três estados da legenda: **já
-  passou** (verde cheio, atrás dele), **rota prevista** (verde tracejado, o
-  trecho logo à frente) e **ainda não passou** (cinza pontilhado, o resto).
-  Um caminhão que não saiu tem a rota inteira em cinza.
-- Tocar num caminhão seleciona; tocar no cartão abre o **itinerário** com as ruas
-  da rota, o horário em que cada uma foi atendida e a estimativa das que faltam.
-- O mapa **aproxima e afasta** pelos botões, pela roda do mouse ou arrastando
-  para deslocar. Os marcadores e os traços mantêm o tamanho aparente em qualquer
-  nível de aproximação, então a leitura não muda. O botão de mira volta ao seu
-  bairro.
-- O tempo de chegada é calculado a partir da distância que falta e da velocidade
-  do caminhão — não é um texto fixo.
-- Os horários do itinerário saem da **janela de coleta do bairro**, distribuídos
-  ao longo da rota. Assim o que o itinerário mostra fecha com o que o calendário
-  e os cartões de status prometem, em vez de seguir o relógio de quem abre.
+Agora o estado é reativo: mudar o bairro atualiza sozinho o cartão, a lista de
+coletas, o calendário e o caminhão em destaque. As funções de desenho sumiram.
 
-### Bairros e localização
-- Cada bairro tem sua própria regra de dias, janela de horário, caminhão e
-  ponto no mapa.
-- Ao trocar de bairro, o mapa acompanha: sua localização se move, o caminhão em
-  destaque passa a ser o que atende aquela região e o alerta de aproximação
-  volta a valer para ele.
-- O botão de alvo no mapa devolve o foco ao caminhão do seu bairro e pisca a
-  sua localização.
+Isso também eliminou um defeito real: a camada da frota era refeita a cada
+segundo com `innerHTML`, o que destruía o elemento em foco — quem navegava pelo
+teclado perdia o foco a cada segundo. O Vue mexe só no atributo que mudou, então
+o foco permanece.
 
-### Calendário
-- Gerado a partir do calendário real: navega por qualquer mês e ano.
-- São **nove bairros** de Belém: Umarizal, Reduto, Campina, Cidade Velha,
-  Nazaré, São Brás, Batista Campos, Jurunas e Guamá. Cada um tem sua própria
-  regra de dias, diferenciando **coleta comum** de **coleta seletiva**.
-- Dia futuro mostra o previsto. Dia passado mostra o que aconteceu: horário real
-  e situação (realizada, com atraso, não realizada).
-- A lista **Últimas coletas** resume as quatro passagens mais recentes.
+**O que continuou imperativo:** os gestos de toque. Pinça e arrasto são conta de
+pixel, e framework nenhum ajuda nisso. O resultado da conta cai em `estado.mapa`,
+que é reativo, e daí a tela se atualiza sozinha.
 
-### Avisos
-- Filtros por tipo e marcação de lido, com contador na barra inferior.
-- O **alerta de aproximação dispara sozinho** quando o caminhão da sua região
-  entra na distância configurada.
+## O que dá para fazer no app
 
-### Relatos
-- Registra coleta não realizada, lixo acumulado, passagem fora do horário ou
-  outro problema.
-- Cada relato ganha um número de protocolo sequencial e fica acompanhável.
-- O dia correspondente no calendário passa a exibir o protocolo.
+- **Mapa** — nove caminhões percorrendo circuitos fechados, cada rota dividida em
+  já passou, rota prevista e ainda não passou. Pinça, arrasto, dois toques para
+  aproximar, e no celular o mapa cresce quando puxado para baixo.
+- **Calendário** — dias de coleta comum e seletiva por bairro, com o histórico do
+  que já aconteceu.
+- **Avisos** — proximidade do caminhão, mudança de horário e comunicados, com
+  filtro e marcação de lido.
+- **Configurações** — bairro, endereço, modo escuro, quais alertas receber, a que
+  distância avisar e o horário do lembrete.
 
-### Configurações
-- Escolha de região e endereço, tipos de alerta, distância de aviso (200 m,
-  500 m ou 1 km) e horário do lembrete da véspera.
-- Tudo fica salvo no navegador: fechar e reabrir mantém o estado.
+Tudo o que o morador escolhe fica guardado no aparelho.
 
-## Como a simulação funciona
+## Publicar na Vercel
 
-Cada caminhão tem uma rota (uma lista de pontos) e uma velocidade. A cada
-segundo o progresso avança, e a posição é interpolada ao longo da linha. A
-divisão entre trecho percorrido e trecho previsto sai desse mesmo cálculo.
+O projeto é detectado como Vite automaticamente: a Vercel roda `npm install` e
+`npm run build`, e publica `dist/`. Basta ligar o repositório do GitHub — a cada
+Push, o site é republicado.
 
-O histórico de dias passados usa uma **semente estável** derivada da data e da
-região (FNV-1a). Assim o mesmo dia devolve sempre o mesmo resultado — o passado
-não se reescreve a cada vez que o app abre.
+O `vercel.json` cuida de duas coisas: o `sw.js` nunca é guardado em cache (senão
+o service worker antigo continuaria valendo) e os arquivos de `recursos/`, que
+têm um código no nome, são guardados por um ano.
 
-A escala do mapa é de 1 unidade para 4 metros, e é ela que dá sentido à
-configuração de distância do alerta.
+## Dados
 
-O desenho cobre a península de Belém: a Baía do Guajará a oeste e o Rio Guamá
-ao sul, com os bairros distribuídos como na cidade — a orla do Umarizal ao
-Cidade Velha, o miolo em Nazaré e São Brás, e a faixa ribeirinha do Jurunas ao
-Guamá. A área desenhada é maior do que a tela, e é o zoom que recorta o pedaço
-visível.
-
-A malha viária não é desenhada à mão: todas as vias saem de um único ângulo
-(-4°), de uma origem e de um espaçamento fixo, e os pontos das rotas são
-exatamente os cruzamentos dessa malha. Cada trecho varia só uma das duas
-coordenadas da grade, então o caminhão anda sempre sobre uma rua, nunca cortando
-quadra na diagonal. As praças ocupam quadras inteiras e giram no mesmo ângulo.
-
-## Limites honestos
-
-Este é um app **com dados simulados**:
-
-- Não há GPS, servidor ou integração com sistema de prefeitura. Rotas, horários
-  e regiões estão no `app.js`.
-- Os avisos aparecem dentro do app, não como notificação do sistema operacional.
-- A simulação é acelerada para ser demonstrável. Uma rota real de coleta leva
-  horas, não minutos.
-
-O comportamento é real; a origem dos dados é simulada.
-
-## Funcionamento sem internet
-
-O `sw.js` guarda o HTML, o CSS, o JS e os ícones na primeira visita. Depois
-disso o app abre mesmo com a rede fora do ar — verificado derrubando o servidor
-e recarregando. A fonte vem do Google Fonts e é o único recurso externo; sem
-rede, o app usa a fonte do sistema e continua legível.
-
-A estratégia é **rede primeiro** para HTML, CSS e JS: o worker tenta buscar a
-versão do servidor e só cai no cache se não houver conexão. É isso que faz uma
-publicação nova chegar sozinha a quem já visitou o site, sem depender de trocar
-o número da versão a cada mudança. Imagens e fontes seguem o caminho oposto —
-cache primeiro, porque quase nunca mudam e assim carregam na hora.
-
-A versão do cache (`trashtime-v2`) só precisa mudar quando a lista de arquivos
-guardados mudar, para o worker descartar o cache antigo.
-
-## Celular e desktop
-
-O layout tem duas formas, com a mesma qualidade nas duas:
-
-- **Celular:** coluna única, barra de abas embaixo, folhas deslizando de baixo
-  para cima.
-- **Desktop (a partir de 900px):** navegação lateral fixa com a marca, conteúdo
-  em duas colunas (mapa grande à esquerda, informações à direita), folhas viram
-  janelas centralizadas e o aviso flutuante vai para o canto.
-
-A troca é feita só por CSS. Os elementos `.faixa` são invisíveis ao layout no
-celular (`display: contents`) e viram as colunas no desktop — assim a mesma
-marcação serve às duas formas, sem duplicação.
-
-## Acessibilidade
-
-- Alvos de toque de no mínimo 44 px.
-- Navegação completa por teclado, incluindo os caminhões no mapa (`Tab` para
-  alcançar, `Enter` ou espaço para selecionar).
-- `Esc` fecha as folhas, devolvendo o foco ao elemento de origem.
-- Contorno de foco visível e mensagens anunciadas a leitores de tela.
+Não há GPS nem servidor. As posições dos caminhões são uma simulação: cada um
+percorre sua rota a uma velocidade fixa. O histórico é gerado a partir da data,
+sempre igual para o mesmo dia. Os relatos ficam só neste aparelho.

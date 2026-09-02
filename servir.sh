@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
-# Sobe o TrashTime num servidor local.
-# É assim que ele funciona como aplicativo instalável: abrindo o arquivo
-# direto (file://) o navegador bloqueia o service worker.
+# Gera a versão publicável e a serve, para testar o app como ele fica de
+# verdade — inclusive o service worker, que só funciona servido por HTTP.
+#
+# Para o dia a dia de desenvolvimento use `npm run dev`, que recarrega
+# sozinho a cada alteração.
 cd "$(dirname "$0")" || exit 1
-echo "TrashTime em http://localhost:8000"
-echo "Para instalar no celular, use o IP desta máquina na mesma rede."
+
+if [ ! -d node_modules ]; then
+    echo "Instalando as dependências (só na primeira vez)..."
+    npm install || exit 1
+fi
+
+npm run build || exit 1
+echo
+echo "TrashTime em http://localhost:4173"
+echo "Para abrir no celular, use o IP desta máquina na mesma rede."
 echo "Ctrl+C encerra."
-python3 -m http.server 8000
+npm run preview -- --host --port 4173

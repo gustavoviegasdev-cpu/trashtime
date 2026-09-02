@@ -1,7 +1,6 @@
 node_modules/
+dist/
+.env.local
+.mcp.json
 .vercel/
 .DS_Store
-*.log
-.vercel
-.env*
-.mcp.json
