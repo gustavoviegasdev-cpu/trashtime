@@ -34,7 +34,6 @@
                 <div class="linha">
                     <div>
                         <p class="linha__titulo">Modo escuro</p>
-                        <p class="linha__texto">{{ textoTema }}</p>
                     </div>
                     <button class="interruptor" :class="{ 'interruptor--ligado': escuro }"
                             role="switch" :aria-checked="escuro ? 'true' : 'false'"
@@ -103,13 +102,6 @@ import { temaAtual, trocarTema } from '../estado/tema.js';
 defineEmits(['alterar-endereco']);
 
 const escuro = computed(() => temaAtual() === 'escuro');
-
-const textoTema = computed(() => {
-    if (estado.config.tema === null) {
-        return 'Seguindo o ajuste do seu aparelho';
-    }
-    return escuro.value ? 'Fundo escuro, melhor de ler à noite' : 'Fundo claro, melhor sob o sol';
-});
 
 const enderecoAtual = computed(() => estado.endereco || regiaoAtual.value.endereco);
 </script>

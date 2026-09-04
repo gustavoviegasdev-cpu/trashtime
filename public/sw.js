@@ -3,7 +3,7 @@
    imagens. Assim uma versão nova chega sozinha a quem já visitou, e o app
    continua abrindo sem internet. */
 
-const CACHE = 'trashtime-v7';
+const CACHE = 'trashtime-v8';
 
 /* O empacotador carimba um código no nome de cada arquivo gerado
    (recursos/index-Cet-lnag.js), e esse nome muda a cada publicação. Por isso a
